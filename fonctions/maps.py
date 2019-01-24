@@ -33,6 +33,8 @@ class Map:
         self.x = len(self.matrice[0])  # Nombre de colonnes
         self.y = len(self.matrice)  # Nombre de lignes
 
+        self.init_tuiles() # Initialisation des tuiles
+
         print(nom + " chargé!") # Logs
 
 
