@@ -10,9 +10,8 @@ pygame.display.set_caption("Ethynd")  # Titre de la fenêtre
 # pygame.display.set_icon("images/icone.png")  # Icone
 ecran = pygame.display.set_mode((640, 480))  # Affichage de la fenêtre
 # 600 et 400: c'est la taille de la fenêtre (20 et 15 tuiles)
-quitter = False
-map = maps.Map("maps/test.map")
-map.init_tuiles() # Initialisation des tuiles
+quitter = False # On ne veux pas quitter le jeu dès le départ :')
+map = maps.Map("maps/test.map") # Chargement de la map
 map.afficher(ecran) # On affiche la map
 
 while quitter != True:  # Tant que le joueur ne veux pas jouer
