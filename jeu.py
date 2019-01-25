@@ -3,7 +3,7 @@
 + Boucle de jeu
 Auteurs: Sofiane Dorian Anthony
 """
-from fonctions import map
+from fonctions import mapping
 import pygame
 
 pygame.init()  # Mettre en route pygame
@@ -16,7 +16,7 @@ ecran = pygame.display.set_mode((0, 0),             # (0, 0) = taille de écran
 # On affiche la fenêtre lors de la définition de "ecran".
 
 quitter = False # On ne veux pas quitter le jeu dès le départ :')
-map = maps.Map("maps/test.map") # Chargement de la map
+map = mapping.Map("maps/test.map") # Chargement de la map
 
 while quitter != True:  # Tant que le joueur ne veux pas jouer
     """ Boucle de jeu
