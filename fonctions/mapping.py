@@ -3,43 +3,42 @@
 Objet "Map" qui correspond a une carte de tuiles.
 Auteur: Sofiane
 """
-
-import pygame
+import pygame as pg
 import os
 
 
 class Map:
     """Créer une map
-    Pour créer des maps directement et facilement
+    Pour créer des maps directement et facilement (Un outil)
+    Permets de:
+    - Charger une map (Avec 3 couches de tuiles)
+    - Afficher une map (Avec les 3 couches de tuiles)
+    ++ Support transparence.
     """
 
-    def __init__(self, nom, couleur_fond=(10, 10, 10)):
-        print("Chargement de " + nom)  # Les logs
-
+    def __init__(self, nom, couleur_fond=(40, 38, 51)):
         self.couleur_fond = couleur_fond
-        self.nom = nom  # Stockage du nom
-        self.matrice = []  # Matrice qui stockera la map
-        fichier = open(nom, "r")  # Ouvrir le fichier map
+        self.matrices = {
+            0: [],  # Matrice qui stockera le fond
+            1: [],  # Matrice qui stockera le milieu
+            2: []  # Matrice qui stockera le 1er plan
+        }
+        for i in range(3):  # On a 3 calque, ici on parcours les calques
+            nom_fichier = nom + "_" + str(i) + ".csv"  # Nom du fichier
+            #                                          # Ex: nom_0.csv
+            print("Chargement de", nom_fichier + "...")  # Les logs
+            f = open(nom_fichier, "r")    # Ouvrir le fichier
+            for ligne in f.readlines():   # Je regarde chaque lignes
+                ligne = ligne.replace("\n", "")  # Je supprime les \n
+                ligne = ligne.split(",")  # On convertis la ligne en liste
+                if ligne != []:  # Si la ligne en liste n'est pas nulle
+                    self.matrices[i].append(ligne)  # On ajoute la liste
+            f.close()  # Fermer fichier
 
-        for ligne in fichier.readlines():  # Je regarde chaque lignes
-            compteur = 0  # Compteur de lignes
-
-            ligne = ligne.split()  # On convertis la ligne en liste
-            # Split permets de supprimer les espaces inutiles
-
-            if ligne != []:  # Si la ligne en liste n'est pas nulle
-                self.matrice.append(ligne)  # On ajoute la ligne en liste
-
-            compteur += 1  # On ajoute 1 ligne au compteur car on l'a lu
-
-        fichier.close()  # Fermer fichier
-
-        self.x = len(self.matrice[0])  # Nombre de colonnes
-        self.y = len(self.matrice)  # Nombre de lignes
-
+        # Pour le nombre de colonnes et de lignes on utilise la matrice du fond
+        self.x = len(self.matrices[0][0])  # Nombre de colonnes
+        self.y = len(self.matrices[0])     # Nombre de lignes
         self.init_tuiles()  # Initialisation des tuiles
-
-        print(nom + " chargé!")  # Logs
 
     def afficher(self, ecran):
         """ Affiche la map
@@ -49,33 +48,39 @@ class Map:
 
         # Je capture les dimensions de la fenêtre actuelle
         l, h = ecran.get_width(), ecran.get_height()  # l = largeur
-#                                                     # h = hauteur
+        #                                             # h = hauteur
         # Je calcule les points centraux (moyenne)
         x_centre = l/2  # Le x central
         y_centre = h/2  # Le y central
 
         # Je calcule le point de départ pour le rendu de la map
-        # Formule:    Point - Nb tuiles_map * 16 / 2
-        # Simplifiée: Point - Nb_tuiles_map * 8
-        x_rendu = x_centre - self.x * 8
-        y_rendu = y_centre - self.y * 8
+        # Formule:    Point - Nb tuiles_map * 32 / 2
+        # Simplifiée: Point - Nb_tuiles_map * 16
+        x_rendu = x_centre - self.x * 16
+        y_rendu = y_centre - self.y * 16
 
-        for i in range(self.x):  # Parcours les colonnes
-            for j in range(self.y):  # Je parcours les lignes
-                if self.matrice[j][i] in self.tuiles:  # Si la tuile est connue
-                    tuile = self.tuiles[self.matrice[j][i]]  # Stocker la tuile
-                    ecran.blit(tuile, (x_rendu + 16*i,   # Tuile par tuile
-                                       y_rendu + 16*j))  # Afficher la map
+        for i in range(3):  # Je parcours les couches
+            for x in range(self.x):  # Parcours les colonnes
+                for y in range(self.y):  # Je parcours les lignes
+                    # En parcourant les 3 dimensions, on parcours toutes
+                    # les tuiles. Voilà ce qu'on va faire avec:
+                    if self.matrices[i][y][x] in self.tuiles:  # Si elle existe
+                        tuile = self.tuiles[self.matrices[i][y][x]]  # On save
+                        ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
+                                           y_rendu + 32*y))  # Tuile par tuile
 
-    def init_tuiles(self):  # Initialiser les tuiles
+    def init_tuiles(self):
         """ Initialiser les tuiles
-        Important: Toutes les tuiles doivent être déclarés ici.
         """
         print("Chargement des tuiles...")  # Logs
         self.tuiles = {}  # Dictionnaire des tuiles
         for fichier in os.listdir("images/tuiles/"):  # Je parcours les tuiles
             nom = fichier.replace("tuile_", "")   # On supprime le prefix
             nom = nom.replace(".png", "")         # On supprime l'extension
+
+            # On supprime les 0 au début si le nom n'est pas "000"
+            # Si c'est le cas alors on retourne 0. Donc "000" = "0"
+            nom = nom.lstrip("0") if nom != "000" else "0"
             fichier = "images/tuiles/" + fichier  # Ajout du chemin relatif
             # J'ajoute les tuiles au dictionnaire + support transparence
-            self.tuiles[nom] = pygame.image.load(fichier).convert_alpha()
+            self.tuiles[nom] = pg.image.load(fichier).convert_alpha()
