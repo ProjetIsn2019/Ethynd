@@ -11,8 +11,8 @@ class Map:
     """Créer une map
     Pour créer des maps directement et facilement (Un outil)
     Permets de:
-    - Charger une map (Avec 3 couches de tuiles)
-    - Afficher une map (Avec les 3 couches de tuiles)
+    - Charger une map (Avec 4 couches de tuiles)
+    - Afficher une map (Avec les 4 couches de tuiles)
     ++ Support transparence.
     """
 
@@ -21,9 +21,10 @@ class Map:
         self.matrices = {
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu
-            2: []  # Matrice qui stockera le 1er plan
+            2: [],  # Matrice qui stockera le 1er plan
+            3: []   # Matrice qui stockera le plan spécial
         }
-        for i in range(3):  # On a 3 calque, ici on parcours les calques
+        for i in range(4):  # On a 4 calques, ici on parcours les calques
             nom_fichier = nom + "_" + str(i) + ".csv"  # Nom du fichier
             #                                          # Ex: nom_0.csv
             print("Chargement de", nom_fichier + "...")  # Les logs
@@ -68,6 +69,33 @@ class Map:
                         tuile = self.tuiles[self.matrices[i][y][x]]  # On save
                         ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                            y_rendu + 32*y))  # Tuile par tuile
+
+    def afficher_4eme_couche(self, ecran):
+        """ Affiche la couche transparente de la map
+        Destinée a être utilisée après l'affichage du personnage.
+        """
+
+        # Je capture les dimensions de la fenêtre actuelle
+        l, h = ecran.get_width(), ecran.get_height()  # l = largeur
+        #                                             # h = hauteur
+        # Je calcule les points centraux (moyenne)
+        x_centre = l/2  # Le x central
+        y_centre = h/2  # Le y central
+
+        # Je calcule le point de départ pour le rendu de la map
+        # Formule:    Point - Nb tuiles_map * 32 / 2
+        # Simplifiée: Point - Nb_tuiles_map * 16
+        x_rendu = x_centre - self.x * 16
+        y_rendu = y_centre - self.y * 16
+
+        for x in range(self.x):  # Parcours les colonnes
+            for y in range(self.y):  # Je parcours les lignes
+                # En parcourant les 3 dimensions, on parcours toutes
+                # les tuiles. Voilà ce qu'on va faire avec:
+                if self.matrices[3][y][x] in self.tuiles:  # Si elle existe
+                    tuile = self.tuiles[self.matrices[3][y][x]]  # On save
+                    ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
+                                       y_rendu + 32*y))  # Tuile par tuile
 
     def init_tuiles(self):
         """ Initialiser les tuiles

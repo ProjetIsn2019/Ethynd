@@ -12,8 +12,8 @@ class Joueur:
         """
         self.x = x  # Coordonnées
         self.y = y  # Coordonnées
-        self.width = 32  # Taille
-        self.heigth = 16  # Taille
+        self.width = 64  # Taille
+        self.heigth = 64  # Taille
         self.vitesse = 1  # Vitesse
         self.sprite = "images/sprites/sprite_1_00.png"  # Image
 
@@ -29,7 +29,7 @@ class Joueur:
         touche = pg.key.get_pressed()  # On vérifie les touches
         if touche[pg.K_LEFT] and self.x > 0:  # Si touche est enfoncée
             self.x -= self.vitesse  # Déplacer le personnage
-        # Pareil pour le reste..
+            #                       # Pareil pour le reste..
         if touche[pg.K_RIGHT] and self.x < fenetre_x - self.width:
             self.x += self.vitesse
         if touche[pg.K_UP] and self.y > 0:
@@ -40,6 +40,6 @@ class Joueur:
     def afficher(self, ecran):
         """Affiche le personnage
         """
-        # Chargement de l'image
+        # Chargement de l'image avec transparence
         image_perso = pg.image.load(self.sprite).convert_alpha()
         ecran.blit(image_perso, (self.x, self.y))  # Affichage

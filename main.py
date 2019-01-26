@@ -21,6 +21,7 @@ ecran_x = ecran.get_width()
 ecran_y = ecran.get_height()
 jouer = True  # On ne veux pas quitter le jeu dès le départ :')
 
+pg.mouse.set_visible(False)  # On cache la souris
 map = mapping.Map("maps/test")  # Chargement de la map
 perso = joueur.Joueur(ecran_x/2, ecran_y/2)  # On met le joueur au centre
 
