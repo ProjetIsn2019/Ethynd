@@ -19,13 +19,13 @@ class Joueur:
         self.vitesse = 3  # Vitesse
         self.sprite_base = pg.image.load("images/sprites/hero_bas (1).png").convert_alpha()  # Image
 
-        self.init_animation()
-        self.right = False
+        self.init_animation() # On initialise les animations (dictionnaire : self.animation)
+        self.right = False    #initialise les direction ( par default imobil donc False)
         self.left = False
         self.up = False
         self.down = False
 
-        self.compteur_marche = 5
+        self.compteur_marche = 5 #initialise le compteur de marche (gere les animation (premier sprite du mouvement))
 
     def lecture_touche(self, ecran):
         """Lis ce que le joueur fait
