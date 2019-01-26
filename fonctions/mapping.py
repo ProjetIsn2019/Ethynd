@@ -112,3 +112,14 @@ class Map:
             fichier = "images/tuiles/" + fichier  # Ajout du chemin relatif
             # J'ajoute les tuiles au dictionnaire + support transparence
             self.tuiles[nom] = pg.image.load(fichier).convert_alpha()
+
+    def tuile_coord(self, x, y):
+        """Retourne la tuile aux coordonnées x, y
+        Sers aux collisions et aux events
+        """
+        x = x/32  # Trouver la tuile correspondante
+        y = y/32  # Trouver la tuile correspondante
+        return(self.matrices[0][y][x],  # On retourne les 4 tuiles des
+               self.matrices[1][y][x],  # 4 couches
+               self.matrices[2][y][x],
+               self.matrices[3][y][x],)
