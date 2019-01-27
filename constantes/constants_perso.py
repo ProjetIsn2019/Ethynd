@@ -37,5 +37,30 @@ animation_perso = {
         "images/sprites/sprite_1_34.png",  # Marche1
         "images/sprites/sprite_1_35.png",  # Marche2
         "images/sprites/sprite_1_36.png",  # Marche3
-    ]
+    ],
+    "attaque_bas": [
+        "images/sprites/sprite_1_44.png",  # attaque 0
+        "images/sprites/sprite_1_45.png",  # attaque 1
+        "images/sprites/sprite_1_46.png",  # attaque 2
+        "images/sprites/sprite_1_47.png",  # attaque 3
+        ],
+    "attaque_droite": [
+        "images/sprites/sprite_1_52.png",  # attaque 0
+        "images/sprites/sprite_1_53.png",  # attaque 1
+        "images/sprites/sprite_1_54.png",  # attaque 2
+        "images/sprites/sprite_1_55.png",  # attaque 3
+        ],
+    "attaque_haut": [
+        "images/sprites/sprite_1_48.png",  # attaque 0
+        "images/sprites/sprite_1_49.png",  # attaque 1
+        "images/sprites/sprite_1_50.png",  # attaque 2
+        "images/sprites/sprite_1_51.png",  # attaque 3
+        ],
+    "attaque_gauche": [
+        "images/sprites/sprite_1_56.png",  # attaque 0
+        "images/sprites/sprite_1_57.png",  # attaque 1
+        "images/sprites/sprite_1_58.png",  # attaque 2
+        "images/sprites/sprite_1_59.png",  # attaque 3
+        ]
+
 }
