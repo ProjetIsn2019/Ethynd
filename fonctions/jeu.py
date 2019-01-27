@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Boucle et Events
 Auteurs: Sofiane Dorian Anthony
 """
@@ -11,11 +10,13 @@ def boucle_de_jeu(ecran, perso, map):
     1 éxécution = 1 tick.
     """
     ecran.fill(map.couleur_fond)  # On change la couleur de fond (de la map)
-    perso.lecture_touche(pg.key.get_pressed(), ecran, map.x_camera,  map.y_camera)  # Faire les déplacements, clavier
-    
     map.afficher(ecran)  # On affiche la map chaque tick pour actaliser
     perso.afficher(ecran)  # On actualise la position du personnage
     map.afficher_4eme_couche(ecran)  # On affiche la 4 eme couche opaque
+    x_camera, y_camera = perso.lecture_touche(pg.key.get_pressed() , ecran,  # Faire les déplacements, clavier
+                                      map.x_camera,
+                                      map.y_camera)
+    map.def_camera(x_camera, y_camera)
     return map
 
 
