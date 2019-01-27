@@ -2,7 +2,7 @@
 """Programme final
 Auteurs: Sofiane Dorian Anthony
 """
-from classes import joueur
+from fonctions import joueur
 from classes import mapping
 from classes import jeu
 import pygame as pg

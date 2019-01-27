@@ -3,7 +3,7 @@
 Objet "Map" qui correspond a une carte de tuiles.
 Auteur: Sofiane
 """
-from fonctions import info
+from classes import info
 import pygame as pg
 import os
 
@@ -27,8 +27,6 @@ class Map:
             2: [],  # Matrice qui stockera le 1er plan
             3: []   # Matrice qui stockera le plan spécial
         }
-        self.coords = {}  # Dictionnaire qui nous sert a mettre en lien
-        #                 # Les coordonnées en pixel et en tiles
 
         for i in range(4):  # On a 4 calques, ici on parcours les calques
             nom_fichier = nom + "_" + str(i) + ".csv"  # Nom du fichier

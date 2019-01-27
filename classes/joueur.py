@@ -3,7 +3,7 @@
 Cette classe sera dédiée au joueur, uniquement et pas les PNJs.
 Auteur: Dorian Voland
 """
-from fonctions import info
+from classes import info
 import pygame as pg
 
 
