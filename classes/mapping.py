@@ -71,8 +71,6 @@ class Map:
                     # les tuiles. Voilà ce qu'on va faire avec:
                     x_tuile = x_rendu + 32*x  # Pour faire le décalage
                     y_tuile = y_rendu + 32*y  # Entre chaque tuile
-                    # Sauvegarder dans le dictionnaire
-                    self.coords[(x_tuile, y_tuile)] = (x, y)
                     if self.matrices[i][y][x] in self.tuiles:  # Si elle existe
                         tuile = self.tuiles[self.matrices[i][y][x]]  # On save
                         ecran.blit(tuile, (x_tuile,   # On affiche
