@@ -1,0 +1,41 @@
+import pygame as pg
+
+
+hauteur_perso = 22
+longueur_perso = 64
+vitesse_perso = 4
+
+touches_perso = {
+	"gauche" : pg.K_LEFT,
+	"droite" : pg.K_RIGHT,
+	"haut" :   pg.K_UP,
+	"bas" :	   pg.K_DOWN,
+}
+
+animation_perso = {
+    # Animation marche : 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 [...]
+    "bas": [
+        "images/sprites/sprite_1_00.png",  # Base
+        "images/sprites/sprite_1_01.png",  # Marche1
+        "images/sprites/sprite_1_02.png",  # Marche2
+        "images/sprites/sprite_1_03.png",  # Marche3
+    ],
+    "droite": [
+        "images/sprites/sprite_1_11.png",  # Base
+        "images/sprites/sprite_1_12.png",  # Marche1
+        "images/sprites/sprite_1_13.png",  # Marche2
+        "images/sprites/sprite_1_14.png",  # Marche3
+    ],
+    "haut": [
+        "images/sprites/sprite_1_22.png",  # Base
+        "images/sprites/sprite_1_23.png",  # Marche1
+        "images/sprites/sprite_1_24.png",  # Marche2
+        "images/sprites/sprite_1_25.png",  # Marche3
+    ],
+    "gauche": [
+        "images/sprites/sprite_1_33.png",  # Base
+        "images/sprites/sprite_1_34.png",  # Marche1
+        "images/sprites/sprite_1_35.png",  # Marche2
+        "images/sprites/sprite_1_36.png",  # Marche3
+    ]
+}
