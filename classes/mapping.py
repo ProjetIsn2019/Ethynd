@@ -3,6 +3,7 @@
 Objet "Map" qui correspond a une carte de tuiles.
 Auteur: Sofiane
 """
+from constantes import constantes_tuiles as ct
 import pygame as pg
 import os
 
@@ -68,10 +69,12 @@ class Map:
                 for y in range(self.y):  # Je parcours les lignes
                     # En parcourant les 3 dimensions, on parcours toutes
                     # les tuiles. Voilà ce qu'on va faire avec:
+                    x_tuile = x_rendu + 32*x  # Pour faire le décalage
+                    y_tuile = y_rendu + 32*y  # Entre chaque tuile
                     if self.matrices[i][y][x] in self.tuiles:  # Si elle existe
                         tuile = self.tuiles[self.matrices[i][y][x]]  # On save
-                        ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
-                                           y_rendu + 32*y))  # Tuile par tuile
+                        ecran.blit(tuile, (x_tuile,   # On affiche
+                                           y_tuile))  # Tuile par tuile
 
     def afficher_4eme_couche(self, ecran, camera=(0, 0)):
         """ Affiche la couche transparente de la map
@@ -99,12 +102,6 @@ class Map:
                     ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                        y_rendu + 32*y))  # Tuile par tuile
 
-    def def_camera(self, x_camera, y_camera):
-        """Pour définir la camera en une ligne
-        """
-        self.x_camera = x_camera  # x
-        self.y_camera = y_camera  # y
-
     def charger_tuiles(self):
         """ Initialiser les tuiles
         """
@@ -121,13 +118,33 @@ class Map:
             # J'ajoute les tuiles au dictionnaire + support transparence
             self.tuiles[nom] = pg.image.load(fichier).convert_alpha()
 
-    def tuile_coord(self, x, y):
-        """Retourne la tuile aux coordonnées x, y
+    def tuile_coord(self, x, y, ecran):
+        """Retourne la tuile aux coordonnées x, y RELATIVES AU JOUEUR
         Sers aux collisions et aux events
         """
-        x = x/32  # Trouver la tuile correspondante
-        y = y/32  # Trouver la tuile correspondante
-        return(self.matrices[0][y][x],  # On retourne les 4 tuiles des
-               self.matrices[1][y][x],  # 4 couches
-               self.matrices[2][y][x],
-               self.matrices[3][y][x],)
+
+        x, y = self.coords[(x, y)]  # Récupérer l'équivalent en tile
+        #                           # des coordonnées pour se positionner dans
+        #                           # Les matrices
+        return (self.matrices[0][y][x],  # On retourne les 4 tuiles des
+                self.matrices[1][y][x],  # 4 couches
+                self.matrices[2][y][x],
+                self.matrices[3][y][x])
+
+    def est_accessible(self, x, y, ecran):
+        """Détermine si un bloc est accessible ou si il ne l'est pas
+        (Collisions)
+        Retourne un boolean
+        """
+        tuiles = self.tuile_coord(x, y, ecran)  # Trouver tuiles en (x;y)
+        print(tuiles)
+        if tuiles == ("-1", "-1", "-1", "-1"):  # Si c'est vide
+            return False  # Retourner non car le perso ne peux pas y aller
+        else:  # Si c'est pas vide
+            for tuile in tuiles:  # Je parcours les couches de tuiles
+                if tuile in ct.collision:  # Si une tuile a une collision
+                    return False  # Retourner non
+                elif tuile in ct.eau:  # Si une tuile est de l'eau
+                    return False  # Retourner non
+                else:  # Sinon
+                    return True  # Retourner oui, pas de collisions/vide.

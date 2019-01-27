@@ -3,128 +3,87 @@
 Cette classe sera dédiée au joueur, uniquement et pas les PNJs.
 Auteur: Dorian Voland
 """
+from constantes import constantes_joueur as cj
 import pygame as pg
-import os
 
 
 class Joueur:
-    def __init__(self, x_camera, y_camera, hauteur, largeur, vitesse, animation, touche):
+    def __init__(self):
         """Initialise le personnage
         """
-        self.x = x_camera  # Coordonnées
-        self.y = y_camera  # Coordonnées
+        self.largeur = 24  # Taille Largeur
+        self.hauteur = 64  # Taille Hauteur
+        self.direction = "bas"  # Direction du personnage (bas par défaut)
+        self.mouvement = None   # Mouvement actuel du joueur (None = aucun)
+        self.libre = True       # Si le personnage est pas occupé à faire qqch
+        self.charger_sprite()   # On charge les sprites
 
-        self.largeur = largeur  # Taille
-        self.hauteur = hauteur  # Taille
-        self.vitesse = vitesse  # Vitesse (pixel/sec)
-        
-        self.direction = "bas"  #direction par default
-        self.mouvement = None
-        self.libre = True
-        self.animation = animation
-        self.charger_sprite() # On initialise les animations (dictionnaire : self.animation)
-        self.touches_perso = touche
-       
-        
-        self.compteur_marche = 5 #initialise le compteur de marche (gere les animation (premier sprite du mouvement))
-        self.compteur_action = 0
-
-    def lecture_touche(self,touche, ecran, x_camera, y_camera):
+    def bouger(self, ecran, map):
         """Lis ce que le joueur fait
             On agit en conséquence, ex: si le joueur appuie en haut le
             sprite va en haut, etc.
         """
-        # On vérifie les touches
-        if self.libre: 
-            if touche[self.touches_perso["attaque"]]:
-
-                self.mouvement = "attaque"
-                self.libre = False
-                for clef, valeur in self.touches_perso.items():
-                    self.direction = clef if touche[valeur] and clef != "attaque" else   self.direction
-                    
-            elif touche[self.touches_perso["gauche"]]: # Si la touche est gauche
-                self.mouvement = "marche"                # Le personnage bouge
-                x_camera += self.vitesse
-                self.direction = 'gauche'            # Set la direction
-            
-            elif touche[self.touches_perso["droite"]]:
-                x_camera -= self.vitesse
-                self.direction = 'droite'
-                self.mouvement = "marche"
-
-            elif touche[self.touches_perso["haut"]]:
-                y_camera += self.vitesse
-                self.direction = 'haut'
-                self.mouvement = "marche"
-
-            elif touche[self.touches_perso["bas"]]:
-                y_camera -= self.vitesse
-                self.direction = 'bas'
-                self.mouvement = "marche"
-
-            else:
-                self.direction = 'bas'
-                self.mouvement = False
-                
-                
-
-
-        return x_camera, y_camera #renvoie les coordoné de la camera
+        bool = True  # Boolean pour savoir si la boucle s'execute pas
+        touches = pg.key.get_pressed()  # Touches enfoncées
+        if not self.libre:  # Si le personnage est occupé
+            return          # Quitter la fonction
+        for touche in cj.touches:  # Je parcours les touches enfoncées
+            if touches[touche]:  # Si la touche est définie dans constantes
+                map.x_camera += cj.touches[touche][0]  # Bouger camera
+                map.y_camera += cj.touches[touche][1]  # Bouger camera
+                if cj.touches[touche][2] is not None:
+                    self.direction = cj.touches[touche][2]  # Modif direction
+                self.mouvement = cj.touches[touche][3]  # Changer mouvement
+                self.libre = cj.touches[touche][4]  # Changer disponibilité
+                bool = False  # La boucle s'est executée
+        if bool:  # Si la boucle ne s'est pas executé (bool est sur true)
+            self.mouvement = None  # On dit qu'il n'y a aucun mouvement
 
     def charger_sprite(self):
         """Charge les sprites
         Permets de charger les sprites du dictionnaire "info"
         """
-        for mouvement in self.animation:  # Parcours des mouvements
+        for mouvement in cj.animation:  # Parcours des mouvements
             numero = 0  # Compteur utilisé dans le parcours des sprites
-            for sprite in self.animation[mouvement]:  # Parcours des sprites
+            for sprite in cj.animation[mouvement]:  # Parcours des sprites
                 if isinstance(sprite, str):  # Si le sprite est encore un texte
                     img = pg.image.load(sprite).convert_alpha()  # Charger Img
-                    self.animation[mouvement][numero] = img  # Sauvegarder
+                    cj.animation[mouvement][numero] = img  # Sauvegarder
                 numero += 1  # Numéro du sprite actuel + 1
-
 
     def afficher(self, ecran):
         """Affiche le personnage
         Et gère ses animations
         """
-         # Je capture les dimensions de la fenêtre actuelle
-        y_decalage,x_decalage= -self.hauteur/2, -self.largeur/2  # Le décalage car l'image se génère
+        # Je capture les dimensions de la fenêtre actuelle
+        # Et je calcule les points centraux (moyenne)
+        y_decalage = -self.hauteur/2  # Le décalage car l'image se génère
+        x_decalage = -self.largeur/2  # A partir de son côté haut gauche
+        x_centre = ecran.get_width()/2 + x_decalage   # Le x central
+        y_centre = ecran.get_height()/2 + y_decalage  # Le y central
 
-        x_centre, y_centre = ecran.get_width()/2 + x_decalage , ecran.get_height()/2 + y_decalage  
-        #                    # Le x central              # Le y central
-        if self.mouvement == "marche":
-            compteur_marche = self.compteur_marche
-            self.compteur_marche = compteur_marche + 1 if compteur_marche +1 < 20 else 0 #compteur de marche renitialise tout les 20px
-
-            nombre = self.compteur_marche // 5  # On veut un nombre dans [0;3]
-
-            sprite = self.animation[self.direction] # On met charge la liste de sprite 
-            sprite = sprite[nombre]                 # On charge le sprite
-            
-            ecran.blit(sprite, (x_centre, y_centre)) # On colle l'image
-        elif self.mouvement == "attaque":
-
+        if self.mouvement == "marche":  # Si le joueur est en mouvement
             # Gestion du compteur
-            self.compteur_action = self.compteur_action + 1 if self.compteur_action < 19 else 0
+            self.compteur = self.compteur + 1 if self.compteur < 20 - 1 else 0
+            # Le compteur augemente si on est en dessous de 19
+            # Si on atteind 19 on rénitialise le compteur à 0
+            # Diviseur = 5 (Fréquence normale)
+            nombre = self.compteur // 5  # On veut un nombre dans [0;3]
+
+        elif self.mouvement == "attaque":
+            # Gestion du compteur
+            self.compteur = self.compteur + 1 if self.compteur < 12 - 1 else 0
             # Pareil que plus haut
-            
-            if self.compteur_action == 0:  # Si l'animation est terminée
-                self.libre = True# Libérer le bersonnage
-                compteur_action = 0  # Choisir la tuile de base
+            if self.compteur == 0:  # Si l'animation est terminée
+                self.libre = True  # Libérer le bersonnage
+                nombre = 0  # Choisir la tuile de base
+            # Diviseur = 3 (Fréquence rapide)
+            nombre = self.compteur // 3 + 3  # On veut un nombre dans [3;7]
 
-            # Diviseur = 2 (Fréquence très rapide)
-            nombre = self.compteur_action // 5  # On veut un nombre dans [3;7]
-            animation = self.mouvement + "_" + self.direction
-            sprite = self.animation[animation] # On met charge la liste de sprite 
-            sprite = sprite[nombre]                 # On charge le sprite
-            
-            ecran.blit(sprite, (x_centre, y_centre)) # On colle l'image
+        else:  # On reviens en position standart si rien ne ce passe
+            self.compteur = 0  # Pas de compteur de marche
+            nombre = 0
 
-        else:
-            self.compteur_marche = 5 #on renitialise le compteur de marche
-
-            sprite = self.animation[self.direction]  # On prend la liste
-            sprite = sprite[0]  # On prend le bon sprite? 0 = sprite de base
-            ecran.blit(sprite, (x_centre, y_centre))  # Affiche
+        sprite = cj.animation[self.direction]  # On prend la liste
+        sprite = sprite[nombre]  # On prend le bon sprite
+        ecran.blit(sprite, (x_centre, y_centre))  # Affiche le sprite
