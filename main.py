@@ -20,5 +20,4 @@ while cp.jouer:  # Tant que le joueur joue
 
     cp.horloge.tick(30)  # 30 tick par seconde seront executés
     pg.display.update()  # On change de tick. On actualise l'écran.
-
 pg.quit()  # Quitter pg.

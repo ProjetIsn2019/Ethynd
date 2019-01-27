@@ -35,10 +35,13 @@ def boucle_de_jeu():
     cp.map.afficher(cp.ecran)  # On affiche la map chaque tick pour actaliser
     cp.perso.afficher(cp.ecran)  # On actualise la position du personnage
     cp.map.afficher_4eme_couche(cp.ecran)  # On affiche la 4 eme couche opaque
-    cp.perso.bouger(cp.ecran, cp.map)  # Faire les déplacements, clavier
+    cp.perso.lire_touches(cp.ecran,           # Event déplacements
+                          cp.map)             # Faire les déplacements
 
 
 def event_pg(event):  # Events pygame
+        """Les evénements pygame
+        """
         if event.type == pg.KEYDOWN:  # Event : Touche enclenchée
 
             if event.key == pg.K_ESCAPE:  # Touche = Echappe
