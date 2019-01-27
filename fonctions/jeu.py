@@ -14,10 +14,7 @@ def boucle_de_jeu(ecran, perso, map):
     map.afficher(ecran)  # On affiche la map chaque tick pour actaliser
     perso.afficher(ecran)  # On actualise la position du personnage
     map.afficher_4eme_couche(ecran)  # On affiche la 4 eme couche opaque
-    x_camera, y_camera = perso.bouger(ecran,  # Faire les déplacements, clavier
-                                      map.x_camera,
-                                      map.y_camera)
-    map.def_camera(x_camera, y_camera)
+    perso.bouger(ecran, map)  # Faire les déplacements, clavier
     return map
 
 
