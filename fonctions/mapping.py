@@ -19,15 +19,14 @@ class Map:
     def __init__(self, nom, couleur_fond=(40, 38, 51)):
         self.x_camera = 0  # Camera X (position)
         self.y_camera = 0  # Camera Y (position)
-
         self.couleur_fond = couleur_fond  # Couleur de fond
-
         self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu
             2: [],  # Matrice qui stockera le 1er plan
             3: []   # Matrice qui stockera le plan spécial
         }
+
         for i in range(4):  # On a 4 calques, ici on parcours les calques
             nom_fichier = nom + "_" + str(i) + ".csv"  # Nom du fichier
             #                                          # Ex: nom_0.csv

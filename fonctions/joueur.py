@@ -8,11 +8,9 @@ from fonctions import info
 
 
 class Joueur:
-    def __init__(self, x, y):
+    def __init__(self):
         """Initialise le personnage
         """
-        self.x = x  # Coordonnées
-        self.y = y  # Coordonnées
         self.largeur = 24  # Taille Largeur
         self.hauteur = 64  # Taille Hauteur
         self.direction = "bas"  # Direction du personnage (bas par défaut)
@@ -54,6 +52,13 @@ class Joueur:
         Et gère ses animations
         """
 
+        # Je capture les dimensions de la fenêtre actuelle
+        l, h = ecran.get_width(), ecran.get_height()  # l = largeur
+        #                                             # h = hauteur
+        # Je calcule les points centraux (moyenne)
+        x_centre = l/2  # Le x central
+        y_centre = h/2  # Le y central
+
         if self.mouvement is not None:  # Si le joueur est en mouvement
             # Gestion du compteur
             compteur = self.compteur  # Pour plus de visibilité
@@ -65,11 +70,11 @@ class Joueur:
             nombre = self.compteur // 5  # On veut un nombre dans [0;3]
             sprite = info.animation[self.direction]  # On prend la liste
             sprite = sprite[nombre]  # On prend le bon sprite
-            ecran.blit(sprite, (self.x, self.y))  # On affiche
+            ecran.blit(sprite, (x_centre, y_centre))  # On affiche
 
         else:  # On reviens en position standart si rien ne ce passe
             self.compteur = 0  # Pas de compteur de marche
 
             sprite = info.animation[self.direction]  # On prend la liste
             sprite = sprite[0]  # On prend le bon sprite? 0 = sprite de base
-            ecran.blit(sprite, (self.x, self.y))  # Affiche
+            ecran.blit(sprite, (x_centre, y_centre))  # Affiche
