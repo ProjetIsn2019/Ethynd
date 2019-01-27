@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
 """Programme final
+
+
+
 Auteurs: Sofiane Dorian Anthony
 """
-from fonctions import jeu
 from classes import joueur
+from constantes import constantes_perso as const_p 
 from classes import mapping
+from fonctions import jeu
 import pygame as pg
 
 # FENETRE
@@ -28,7 +31,7 @@ horloge = pg.time.Clock()
 # AUTRE
 pg.mouse.set_visible(False)  # On cache la souris
 map = mapping.Map("maps/test")  # Chargement de la map
-perso = joueur.Joueur()  # On met le joueur au centre
+perso = joueur.Joueur(0, 0, const_p.hauteur_perso, const_p.longueur_perso, const_p.vitesse_perso, const_p.animation_perso, const_p.touches_perso)  # On met le joueur au centre
 # AUTRE
 
 while jouer:  # Tant que le joueur joue
