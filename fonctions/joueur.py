@@ -4,8 +4,8 @@ Cette classe sera dédiée au joueur, uniquement et pas les PNJs.
 Auteur: Dorian Voland
 """
 import pygame as pg
-import os
-from fonctions import constants
+from fonctions import info
+
 
 class Joueur:
     def __init__(self, x, y):
@@ -13,131 +13,63 @@ class Joueur:
         """
         self.x = x  # Coordonnées
         self.y = y  # Coordonnées
+        self.largeur = 24  # Taille Largeur
+        self.hauteur = 64  # Taille Hauteur
+        self.direction = "bas"  # Direction du personnage (bas par défaut)
+        self.mouvement = None  # Mouvement actuel du joueur (None = aucun)
+        self.charger_sprite()  # On charge les sprites
 
-        self.width = 64  # Taille
-        self.heigth = 64  # Taille
-        self.vitesse = 3  # Vitesse
-        self.sprite_base = pg.image.load("images/sprites/hero_bas (1).png").convert_alpha()  # Image
-
-        self.init_animation() # On initialise les animations (dictionnaire : self.animation)
-        self.right = False    #initialise les direction ( par default imobil donc False)
-        self.left = False
-        self.up = False
-        self.down = False
-
-        self.compteur_marche = 5 #initialise le compteur de marche (gere les animation (premier sprite du mouvement))
-
-    def lecture_touche(self, ecran):
+    def bouger(self, ecran, x_camera, y_camera):
         """Lis ce que le joueur fait
             On agit en conséquence, ex: si le joueur appuie en haut le
             sprite va en haut, etc.
         """
+        bool = True  # Boolean pour savoir si la boucle s'execute pas
+        touches = pg.key.get_pressed()  # Touches enfoncées
+        for touche in info.touches:  # Je parcours les touches enfoncées
+            if touches[touche]:  #
+                x_camera += info.touches[touche][0]  # On actualise les var
+                y_camera += info.touches[touche][1]  # Etc..
+                self.direction = info.touches[touche][2]
+                self.mouvement = info.touches[touche][3]
+                bool = False  # La boucle s'est executée
+        if bool:  # Si la boucle ne s'est pas executé (bool est sur true)
+            self.mouvement = None  # On dit qu'il n'y a aucun mouvement
+        return x_camera, y_camera  # Renvoi des coordonnées de la camera
 
-        fenetre_x = ecran.get_width()  # La largeur de l'écran
-        fenetre_y = ecran.get_height()  # La hauteur de l'écran
-
-        touche = pg.key.get_pressed()  # On vérifie les touches
-        if touche[pg.K_LEFT] and self.x > 0:  # Si touche est enfoncée
-            self.x -= self.vitesse  # Déplacer le personnage
-            #                       # Pareil pour le reste..
-            self.right = False      #variable de animation
-            self.left = True
-            self.up = False
-            self.down = False
-
-        elif touche[pg.K_RIGHT] and self.x < fenetre_x - self.width:
-            self.x += self.vitesse
-            self.right = True
-            self.left = False
-            self.up = False
-            self.down = False
-
-        elif touche[pg.K_UP] and self.y > 0:
-            self.y -= self.vitesse
-            self.right = False
-            self.left = False
-            self.up = True
-            self.down = False
-
-        elif touche[pg.K_DOWN] and self.y < fenetre_y - self.heigth:
-            self.y += self.vitesse
-            self.right = False
-            self.left = False
-            self.up = False
-            self.down = True
-        else:
-            self.right = False
-            self.left = False
-            self.up = False
-            self.down = False
-
-    def init_animation(self):
+    def charger_sprite(self):
+        """Charge les sprites
+        Permets de charger les sprites du dictionnaire "info"
         """
-            fonction qui revoie une liste des animation avec leur sprite:
-                    key = ['bas', 'bas_triste', 'bas_main', 
-                    'droite', 'droite_triste', 'droite_main', 
-                    'haut', 'haut_triste', 'haut_main',
-                    'gauche', 'gauche_triste', 'gauche_main', 
-                    'bas_attaque', 'haut_attaque', 'droite_attaque', 'gauche_attaque']
+        for mouvement in info.animation:  # Parcours des mouvements
+            numero = 0  # Compteur utilisé dans le parcours des sprites
+            for sprite in info.animation[mouvement]:  # Parcours des sprites
+                if isinstance(sprite, str):  # Si le sprite est encore un texte
+                    img = pg.image.load(sprite).convert_alpha()  # Charger Img
+                    info.animation[mouvement][numero] = img  # Sauvegarder
+                numero += 1  # Numéro du sprite actuel + 1
+
+    def afficher(self, ecran):
+        """Affiche le personnage
+        Et gère ses animations
         """
-        print("Chargement des animations...")
-        self.animation = {}
-        
 
-        for animation in os.listdir("images/sprites/"):
+        if self.mouvement is not None:  # Si le joueur est en mouvement
+            # Gestion du compteur
+            compteur = self.compteur  # Pour plus de visibilité
+            self.compteur = compteur + 1 if compteur < 20 - 1 else 0
+            # Le compteur augemente si on est en dessous de 19
+            # Si on atteind 19 on rénitialise le compteur à 0
+            # Car le prochain nombre est 19 et compteur < 20 est rempli donc
+            # On utilise compteur < 19 pour éviter d'avoir un trop gros nombre
+            nombre = self.compteur // 5  # On veut un nombre dans [0;3]
+            sprite = info.animation[self.direction]  # On prend la liste
+            sprite = sprite[nombre]  # On prend le bon sprite
+            ecran.blit(sprite, (self.x, self.y))  # On affiche
 
-            sprite = []
-            
-            nom = animation.replace("hero_", "")                # On supprime le prefix
-            nom = nom.replace(".png", "")                       # On supprime l'extension
-            nom_temp = nom.split(" ")                           # On separe le nombre et le nom
+        else:  # On reviens en position standart si rien ne ce passe
+            self.compteur = 0  # Pas de compteur de marche
 
-            nom_animation = nom_temp[0]                         # On recupere le nom
-            fichier = "images/sprites/" + animation 
-            image = pg.image.load(fichier).convert_alpha()      # Image est loader
-            
-
-            
-            if not nom_animation in self.animation.keys():      # Si c'est la premiere sprite, on ajoute au dictionnaire le sprite
-                sprite.append(image)
-                self.animation[nom_animation] = sprite
-            
-            else:                                               # Sinon on ajoute l'image a la liste corespondant a la clef
-                sprite += self.animation[nom_animation]
-                sprite.append(image)
-                self.animation[nom_animation] = sprite
-
-        # print("key: ", self.animation.keys())
-
-    def afficher(self, fenetre):
-        """
-            fonction qui gere les animation du personnage
-        """
-        if self.compteur_marche + 1 > 15:           #compteur de marche renitialise tout les 20px
-            self.compteur_marche = 0
-
-        if self.right :     #animation droite       #si le personnage va à droite alors jouer l'animation droite
-            sprite = self.animation["droite"]       #sprite prend la liste contenu dans le dictionnaire
-            self.compteur_marche +=1               
-
-            fenetre.blit(sprite[self.compteur_marche//5], (self.x, self.y)) #toute les 5 tours de boucle, on change d'image
-
-        elif self.left :    #animation gauche
-            sprite = self.animation["gauche"]   
-            self.compteur_marche +=1
-            fenetre.blit(sprite[self.compteur_marche//5], (self.x, self.y))
-        elif self.up:       #animation haut
-            sprite = self.animation["haut"]
-            
-            self.compteur_marche +=1
-            fenetre.blit(sprite[self.compteur_marche//5], (self.x, self.y))
-        elif self.down:      #animation bas
-            sprite = self.animation["bas"]
-           
-            self.compteur_marche +=1
-            fenetre.blit(sprite[self.compteur_marche//5], (self.x, self.y))
-        else:
-            self.compteur_marche = 5                                           #remet le compteur a 5 (premeir splite de mouvement)
-
-            fenetre.blit(self.sprite_base, (self.x, self.y))                   # on reviens en position standart si rien ne ce passe
-    
+            sprite = info.animation[self.direction]  # On prend la liste
+            sprite = sprite[0]  # On prend le bon sprite? 0 = sprite de base
+            ecran.blit(sprite, (self.x, self.y))  # Affiche

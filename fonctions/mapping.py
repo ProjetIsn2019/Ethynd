@@ -17,8 +17,12 @@ class Map:
     """
 
     def __init__(self, nom, couleur_fond=(40, 38, 51)):
-        self.couleur_fond = couleur_fond
-        self.matrices = {
+        self.x_camera = 0  # Camera X (position)
+        self.y_camera = 0  # Camera Y (position)
+
+        self.couleur_fond = couleur_fond  # Couleur de fond
+
+        self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu
             2: [],  # Matrice qui stockera le 1er plan
@@ -39,7 +43,7 @@ class Map:
         # Pour le nombre de colonnes et de lignes on utilise la matrice du fond
         self.x = len(self.matrices[0][0])  # Nombre de colonnes
         self.y = len(self.matrices[0])     # Nombre de lignes
-        self.init_tuiles()  # Initialisation des tuiles
+        self.charger_tuiles()  # Initialisation des tuiles
 
     def afficher(self, ecran):
         """ Affiche la map
@@ -57,8 +61,8 @@ class Map:
         # Je calcule le point de départ pour le rendu de la map
         # Formule:    Point - Nb tuiles_map * 32 / 2
         # Simplifiée: Point - Nb_tuiles_map * 16
-        x_rendu = x_centre - self.x * 16
-        y_rendu = y_centre - self.y * 16
+        x_rendu = x_centre - self.x * 16 + self.x_camera
+        y_rendu = y_centre - self.y * 16 + self.y_camera
 
         for i in range(3):  # Je parcours les couches
             for x in range(self.x):  # Parcours les colonnes
@@ -70,11 +74,10 @@ class Map:
                         ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                            y_rendu + 32*y))  # Tuile par tuile
 
-    def afficher_4eme_couche(self, ecran):
+    def afficher_4eme_couche(self, ecran, camera=(0, 0)):
         """ Affiche la couche transparente de la map
         Destinée a être utilisée après l'affichage du personnage.
         """
-
         # Je capture les dimensions de la fenêtre actuelle
         l, h = ecran.get_width(), ecran.get_height()  # l = largeur
         #                                             # h = hauteur
@@ -85,8 +88,8 @@ class Map:
         # Je calcule le point de départ pour le rendu de la map
         # Formule:    Point - Nb tuiles_map * 32 / 2
         # Simplifiée: Point - Nb_tuiles_map * 16
-        x_rendu = x_centre - self.x * 16
-        y_rendu = y_centre - self.y * 16
+        x_rendu = x_centre - self.x * 16 + self.x_camera
+        y_rendu = y_centre - self.y * 16 + self.y_camera
 
         for x in range(self.x):  # Parcours les colonnes
             for y in range(self.y):  # Je parcours les lignes
@@ -97,7 +100,13 @@ class Map:
                     ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                        y_rendu + 32*y))  # Tuile par tuile
 
-    def init_tuiles(self):
+    def def_camera(self, x_camera, y_camera):
+        """Pour définir la camera en une ligne
+        """
+        self.x_camera = x_camera  # x
+        self.y_camera = y_camera  # y
+
+    def charger_tuiles(self):
         """ Initialiser les tuiles
         """
         print("Chargement des tuiles...")  # Logs
