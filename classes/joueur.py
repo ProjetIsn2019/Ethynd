@@ -39,7 +39,7 @@ class Joueur:
                 if self.mouvement != cj.touches[touche][3]:
                     self.mouvement = cj.touches[touche][3]  # Changer mouvement
                     self.compteur = 0  # Recommencer les animations
-                    self.frame = 0     # Recommencer les animations
+                    self.frame = cj.timings[self.mouvement][2]  # 1ere frame
                 self.libre = cj.touches[touche][4]  # Changer disponibilité
                 test = False  # La boucle s'est executée
         if test:  # Si la boucle ne s'est pas executé (bool est sur true)
@@ -86,8 +86,8 @@ class Joueur:
                     # Sinon si elle est déjà a son max
                 elif self.frame == cj.timings[self.mouvement][1]:
                     self.frame = 0  # Reset
-                    self.libre = cj.timings[self.mouvement][2]  # Liberer perso
-                    if cj.timings[self.mouvement][3]:  # Si on veux revenir
+                    self.libre = cj.timings[self.mouvement][3]  # Liberer perso
+                    if cj.timings[self.mouvement][4]:  # Si on veux revenir
                         self.mouvement = "base"        # Sur base, on le fait
 
         # Charger la liste de sprites relative a la direction et le mouvement

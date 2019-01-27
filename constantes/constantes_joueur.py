@@ -20,14 +20,14 @@ touches = {  # Les touches pour les déplacements
 }
 
 timings = {  # Timings des animations
-    # [tick, images, libre, reset]
+    # [tick, images, frame de départ, libre, reset]
     # tick = le nombre de tick pour changer une frame (Tick entre chaque frame)
     # images = le nombre d'images de l'animation - 1
     # libre = Libérer le personnage après l'animation ? True = oui False = non
     # reset = revenir sur base après la fin de l'animation ? (Sinon on répète)
     "base": [None],
-    "marche": [5, 3, True, False],
-    "attaque": [3, 3, True, True]
+    "marche": [5, 3, 1, True, False],
+    "attaque": [3, 3, 0, True, True]
 }
 
 animation = {  # Repertorier les sprites
