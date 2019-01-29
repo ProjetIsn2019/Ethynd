@@ -4,8 +4,6 @@ Objet "Map" qui correspond a une carte de tuiles.
 Auteur: Sofiane
 """
 from constantes import constantes_tuiles as ct
-import pygame as pg
-import os
 
 
 class Map:
@@ -43,7 +41,6 @@ class Map:
         # Pour le nombre de colonnes et de lignes on utilise la matrice du fond
         self.x = len(self.matrices[0][0])  # Nombre de colonnes
         self.y = len(self.matrices[0])     # Nombre de lignes
-        self.charger_tuiles()  # Initialisation des tuiles
 
     def afficher(self, ecran):
         """ Affiche la map
@@ -71,8 +68,8 @@ class Map:
                     # les tuiles. Voilà ce qu'on va faire avec:
                     x_tuile = x_rendu + 32*x  # Pour faire le décalage
                     y_tuile = y_rendu + 32*y  # Entre chaque tuile
-                    if self.matrices[i][y][x] in self.tuiles:  # Si elle existe
-                        tuile = self.tuiles[self.matrices[i][y][x]]  # On save
+                    if self.matrices[i][y][x] in ct.tuiles:  # Si elle existe
+                        tuile = ct.tuiles[self.matrices[i][y][x]]  # On save
                         ecran.blit(tuile, (x_tuile,   # On affiche
                                            y_tuile))  # Tuile par tuile
 
@@ -97,26 +94,10 @@ class Map:
             for y in range(self.y):  # Je parcours les lignes
                 # En parcourant les 3 dimensions, on parcours toutes
                 # les tuiles. Voilà ce qu'on va faire avec:
-                if self.matrices[3][y][x] in self.tuiles:  # Si elle existe
-                    tuile = self.tuiles[self.matrices[3][y][x]]  # On save
+                if self.matrices[3][y][x] in ct.tuiles:  # Si elle existe
+                    tuile = ct.tuiles[self.matrices[3][y][x]]  # On save
                     ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                        y_rendu + 32*y))  # Tuile par tuile
-
-    def charger_tuiles(self):
-        """ Initialiser les tuiles
-        """
-        print("Chargement des tuiles...")  # Logs
-        self.tuiles = {}  # Dictionnaire des tuiles
-        for fichier in os.listdir("images/tuiles/"):  # Je parcours les tuiles
-            nom = fichier.replace("tuile_", "")   # On supprime le prefix
-            nom = nom.replace(".png", "")         # On supprime l'extension
-
-            # On supprime les 0 au début si le nom n'est pas "000"
-            # Si c'est le cas alors on retourne 0. Donc "000" = "0"
-            nom = nom.lstrip("0") if nom != "000" else "0"
-            fichier = "images/tuiles/" + fichier  # Ajout du chemin relatif
-            # J'ajoute les tuiles au dictionnaire + support transparence
-            self.tuiles[nom] = pg.image.load(fichier).convert_alpha()
 
     def tuile_coord(self, x, y, ecran):
         """Retourne la tuile aux coordonnées x, y RELATIVES AU JOUEUR

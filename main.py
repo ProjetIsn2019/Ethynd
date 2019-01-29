@@ -2,10 +2,11 @@
 """Programme final
 Auteurs: Sofiane Dorian Anthony
 """
+import pygame as pg
 from constantes import constantes_partie as cp
 from fonctions import jeu
-import pygame as pg
 
+pg.init()  # Mettre en route pygame
 jeu.initialiser_jeu()  # J'initialise la partie
 
 while cp.jouer:  # Tant que le joueur joue

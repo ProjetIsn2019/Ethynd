@@ -3,27 +3,31 @@
 Auteurs: Sofiane Dorian Anthony
 """
 from constantes import constantes_partie as cp
+from fonctions import charger
 from classes import joueur
 from classes import mapping
 import pygame as pg
 
 
 def initialiser_jeu():
-    pg.init()  # Mettre en route pg
     pg.display.set_caption("Ethynd")  # Titre de la fenêtre
     pg.display.set_icon(pg.image.load("images/icone.png"))  # Je mettre l'icone
-    pg.mouse.set_visible(False)  # On cache la sourise
-    cp.ecran = pg.display.set_mode((0, 0),         # (0, 0) = taille de écran
-                                   pg.HWSURFACE)   # Plein écran
-    # On affiche la fenêtre lors de la définition de "ecran".
-    # VARIABLES
-    cp.plein_ecran = True  # Notre variable plein écran pour pouvoir le changer
+
+    pg.mouse.set_visible(False)  # On cache la souris
+    cp.ecran = pg.display.set_mode((0, 0),  # (0, 0) = taille de écran, on
+                                   pg.HWSURFACE)   # affiche la fenêtre
     cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
     cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
+
+    cp.plein_ecran = True  # Notre variable plein écran pour pouvoir le changer
     cp.jouer = True  # On ne veux pas quitter le jeu dès le départ :')
-    cp.horloge = pg.time.Clock()
+    cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
+
     cp.map = mapping.Map("maps/test")  # Chargement de la map
-    cp.perso = joueur.Joueur()  # On met le joueur au centre
+    cp.perso = joueur.Joueur()  # Chargement du joueur
+
+    charger.charger_tuiles()  # Charger les images de tuiles
+    charger.charger_sprite()  # Charger les images de sprites
 
 
 def boucle_de_jeu():

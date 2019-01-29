@@ -6,6 +6,7 @@ Tuiles d'eau
 Etc.
 (A IMPORTER)
 """
+tuiles = {}  # Dictionnaire des tuiles. "numero: image"
 
 collision = (  # Liste des blocs sur lesquels on ne peux pas aller
     "16",
