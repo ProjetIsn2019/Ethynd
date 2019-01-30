@@ -4,6 +4,7 @@ Cette classe sera dédiée au joueur, uniquement et pas les PNJs.
 Auteur: Dorian Voland
 """
 from constantes import constantes_joueur as cj
+from constantes import constantes_partie as cp
 import pygame as pg
 
 
@@ -19,19 +20,20 @@ class Joueur:
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
 
-    def lire_touches(self, ecran, map):
+    def lire_touches(self):
         """Lis ce que le joueur faitle
             On agit en conséquence, ex: si le joueur appuie en haut le
             sprite va en haut, etc.
         """
-        test = True  # Boolean test pour savoir si la boucle s'execute pas
         touches = pg.key.get_pressed()  # Touches enfoncées
         if not self.libre:  # Si le personnage est occupé
             return          # Quitter la fonction
         for touche in cj.touches:  # Je parcours les touches enfoncées
             if touches[touche]:  # Si la touche est définie dans constantes
-                map.x_camera += cj.touches[touche][0]  # Bouger camera
-                map.y_camera += cj.touches[touche][1]  # Bouger camera
+                cp.map.x_camera += cj.touches[touche][0]  # Bouger camera
+                cp.map.y_camera += cj.touches[touche][1]  # Bouger camera
+
+                # Si l'animation a une direction
                 if cj.touches[touche][2] is not None:
                     self.direction = cj.touches[touche][2]  # Modif direction
                 # Si le mouvement change
@@ -39,8 +41,8 @@ class Joueur:
                     self.mouvement = cj.touches[touche][3]  # Changer mouvement
                     self.compteur = 0  # Recommencer les animation
                 self.libre = cj.touches[touche][4]  # Changer disponibilité
-                test = False  # La boucle s'est executée
-        if test:  # Si la boucle ne s'est pas executé (bool est sur true)
+                break  # Casser la boucle: Touche trouvée. On évite les autres
+        else:  # Si la boucle n'est pas cassée: Aucune touche trouvée
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
 
     def afficher(self, ecran):

@@ -12,6 +12,7 @@ sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
 touches = {  # Les touches pour les déplacements
     # [0, 0, "direction", "mouvement", libre]
     # Nombre de pixels en x, nombre de pixels en y, direction, mouvement.
+    # libre = Est-ce que le personnage est libre ? True/False
     pg.K_UP:    [0, vitesse, "haut", "marche", True],
     pg.K_LEFT:  [vitesse, 0, "gauche", "marche", True],
     pg.K_DOWN:  [0, -vitesse, "bas", "marche", True],
@@ -21,14 +22,15 @@ touches = {  # Les touches pour les déplacements
 }
 
 timings = {  # Timings des animations
-    # [tick, images, frame de départ, libre, reset]
+    # [tick, images, libre, reset, couper]
     # tick = le nombre de tick pour changer une frame (Tick entre chaque frame)
-    # images = le nombre d'images de l'animation - 1
+    # images = le nombre d'images de l'animation - 1 (0 compte comme une frame)
     # libre = Libérer le personnage après l'animation ? True = oui False = non
     # reset = revenir sur base après la fin de l'animation ? (Sinon on répète)
-    "base": [None],
-    "marche": [5, 3, True, False],
-    "attaque": [1, 3, True, True]
+    # couper = couper l'animation précedente ? True/False
+    "base": [None],  # Si tick = None, alors il y a aucun attribut d'animation
+    "marche": [5, 3, True, False, True],
+    "attaque": [1, 3, True, True, True]
 }
 
 animation = {  # Repertorier les sprites

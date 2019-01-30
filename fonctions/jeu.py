@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Boucle et Events
+Fonctions concernant le jeu et les évènements
 Auteurs: Sofiane Dorian Anthony
 """
 from constantes import constantes_partie as cp
@@ -36,15 +37,15 @@ def boucle_de_jeu():
     1 éxécution = 1 tick.
     """
     cp.ecran.fill(cp.map.couleur_fond)  # On met la couleur de fond de la map
+    cp.perso.lire_touches()  # Faire les déplacements/Animations
     cp.map.afficher(cp.ecran)  # On affiche la map chaque tick pour actaliser
     cp.perso.afficher(cp.ecran)  # On actualise la position du personnage
     cp.map.afficher_4eme_couche(cp.ecran)  # On affiche la 4 eme couche opaque
-    cp.perso.lire_touches(cp.ecran,           # Event déplacements
-                          cp.map)             # Faire les déplacements
 
 
 def event_pg(event):  # Events pygame
         """Les evénements pygame
+        Evènements relatifs à Pygame en soi
         """
         if event.type == pg.KEYDOWN:  # Event : Touche enclenchée
 
