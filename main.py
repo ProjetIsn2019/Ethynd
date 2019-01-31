@@ -19,6 +19,6 @@ while cp.jouer:  # Tant que le joueur joue
     for event in pg.event.get():  # Je parcours les events
         jeu.event_pg(event)  # Fonction des events pygame
 
-    cp.horloge.tick(30)  # 30 tick par seconde seront executés
+    cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
     pg.display.update()  # On change de tick. On actualise l'écran.
 pg.quit()  # Quitter pg.

@@ -24,10 +24,10 @@ def initialiser_jeu():
     cp.jouer = True  # On ne veux pas quitter le jeu dès le départ :')
     cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
 
-    cp.map = mapping.Map("maps/test")  # Chargement de la map
+    cp.map = mapping.Map("maps/test2")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
 
-    charger.charger_tuiles()  # Charger les images de tuiles
+    charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprite()  # Charger les images de sprites
 
 

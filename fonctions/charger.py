@@ -4,26 +4,27 @@ Fonctions dédiées à charger notre base de données de chemin d'images
 Sous forme d'images Pygame
 Auteur: Sofiane Djerbi
 """
-import os
 import pygame as pg
 from constantes import constantes_joueur as cj
 from constantes import constantes_tuiles as ct
 
 
-def charger_tuiles():
-    """ Initialiser les tuiles
+def charger_tileset():
+    """Charger un tileset
+    Associe a chaque tuiles d'un tileset un ID, divise un tileset
+    en plusieurs lignes
+    Permets de bosser avec Tiled
     """
-    print("Chargement des tuiles...")  # Logs
-    # os.listdir retourne l'intégralité des fichiers d'un dossier en liste
-    for fichier in os.listdir("images/tuiles/"):  # Je parcours les tuiles
-        nom = fichier.replace("tuile_", "")   # On supprime le prefix
-        nom = nom.replace(".png", "")         # On supprime l'extension
-        # On supprime les 0 au début si le nom n'est pas "000"
-        # Si c'est le cas alors on retourne 0. Donc "000" = "0"
-        nom = nom.lstrip("0") if nom != "000" else "0"
-        fichier = "images/tuiles/" + fichier  # Ajout du chemin relatif
-        # J'ajoute les tuiles au dictionnaire + support transparence
-        ct.tuiles[nom] = pg.image.load(fichier).convert_alpha()
+    # Charger l'image
+    img = pg.image.load("images/tuiles/tileset.png").convert_alpha()
+    img_largeur, img_hauteur = img.get_size()  # Prendre les dimensions
+    id = 0  # J'initialise les IDs
+    for y in range(int(img_hauteur/32)):  # Je parcours les lignes
+        for x in range(int(img_largeur/32)):  # Je parcours les colonnes
+            rectangle = (x*32, y*32, 32, 32)  # Je divise les tuiles de l'image
+            # J'ajoute au dico des tuiles
+            ct.tuiles[str(id)] = img.subsurface(rectangle)
+            id += 1  # J'incrémente les IDs
 
 
 def charger_sprite():

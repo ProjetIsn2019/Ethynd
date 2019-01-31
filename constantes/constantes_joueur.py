@@ -6,7 +6,7 @@ Etc.
 """
 import pygame as pg
 
-vitesse = 3
+vitesse = 3.5
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
 
 touches = {  # Les touches pour les déplacements
@@ -17,7 +17,7 @@ touches = {  # Les touches pour les déplacements
     pg.K_LEFT:  [vitesse, 0, "gauche", "marche", True],
     pg.K_DOWN:  [0, -vitesse, "bas", "marche", True],
     pg.K_RIGHT: [-vitesse, 0, "droite", "marche", True],
-    pg.K_SPACE: [0, 0, None, "saut", True],
+    pg.K_x:     [0, 0, None, "examiner", True],
     pg.K_w:     [0, 0, None, "attaque", False]
 }
 
@@ -28,8 +28,9 @@ timings = {  # Timings des animations
     # libre = Libérer le personnage après l'animation ? True = oui False = non
     # reset = revenir sur base après la fin de l'animation ? (Sinon on répète)
     "base": [None],  # Si tick = None, alors il y a aucun attribut d'animation
-    "marche": [5, 3, True, False],
-    "attaque": [1, 3, True, True]
+    "marche": [4, 3, True, False],
+    "attaque": [2, 3, True, True],
+    "examiner": [1, 0, True, False]
 }
 
 animation = {  # Repertorier les sprites
@@ -49,6 +50,9 @@ animation = {  # Repertorier les sprites
             sprite + "1_45.png",  # Attaque 2
             sprite + "1_46.png",  # Attaque 3
             sprite + "1_47.png"   # Attaque 4
+        ],
+        "examiner": [
+            sprite + "1_04.png",  # Examiner
         ]
     },
     "droite": {
@@ -66,6 +70,9 @@ animation = {  # Repertorier les sprites
             sprite + "1_53.png",  # Attaque 2
             sprite + "1_54.png",  # Attaque 3
             sprite + "1_55.png"   # Attaque 4
+        ],
+        "examiner": [
+            sprite + "1_15.png",  # Examiner
         ]
     },
 
@@ -84,6 +91,9 @@ animation = {  # Repertorier les sprites
             sprite + "1_49.png",  # Attaque 2
             sprite + "1_50.png",  # Attaque 3
             sprite + "1_51.png"   # Attaque 4
+        ],
+        "examiner": [
+            sprite + "1_26.png",  # Examiner
         ]
     },
 
@@ -102,6 +112,9 @@ animation = {  # Repertorier les sprites
             sprite + "1_57.png",  # Attaque 2
             sprite + "1_58.png",  # Attaque 3
             sprite + "1_59.png"   # Attaque 4
+        ],
+        "examiner": [
+            sprite + "1_37.png",  # Examiner
         ]
     }
 }

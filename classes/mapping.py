@@ -69,7 +69,7 @@ class Map:
                     x_tuile = x_rendu + 32*x  # Pour faire le décalage
                     y_tuile = y_rendu + 32*y  # Entre chaque tuile
                     if self.matrices[i][y][x] in ct.tuiles:  # Si elle existe
-                        tuile = ct.tuiles[self.matrices[i][y][x]]  # On save
+                        tuile = ct.tuiles[self.matrices[i][y][x]]  # On extrait
                         ecran.blit(tuile, (x_tuile,   # On affiche
                                            y_tuile))  # Tuile par tuile
 
@@ -95,7 +95,7 @@ class Map:
                 # En parcourant les 3 dimensions, on parcours toutes
                 # les tuiles. Voilà ce qu'on va faire avec:
                 if self.matrices[3][y][x] in ct.tuiles:  # Si elle existe
-                    tuile = ct.tuiles[self.matrices[3][y][x]]  # On save
+                    tuile = ct.tuiles[self.matrices[3][y][x]]  # On extrait
                     ecran.blit(tuile, (x_rendu + 32*x,   # On affiche
                                        y_rendu + 32*y))  # Tuile par tuile
 
