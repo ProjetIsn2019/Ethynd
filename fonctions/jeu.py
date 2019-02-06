@@ -16,7 +16,7 @@ def initialiser_jeu():
 
     pg.mouse.set_visible(False)  # On cache la souris
     cp.ecran = pg.display.set_mode((0, 0),  # (0, 0) = taille de écran, on
-                                   pg.HWSURFACE)   # affiche la fenêtre
+                                   pg.FULLSCREEN)   # affiche la fenêtre
     cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
     cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
 
@@ -24,11 +24,11 @@ def initialiser_jeu():
     cp.jouer = True  # On ne veux pas quitter le jeu dès le départ :')
     cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
 
-    cp.map = mapping.Map("maps/test2")  # Chargement de la map
-    cp.perso = joueur.Joueur()  # Chargement du joueur
-
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprite()  # Charger les images de sprites
+
+    cp.map = mapping.Map("maps/test3")  # Chargement de la map
+    cp.perso = joueur.Joueur()  # Chargement du joueur
 
 
 def boucle_de_jeu():
@@ -38,9 +38,9 @@ def boucle_de_jeu():
     """
     cp.ecran.fill(cp.map.couleur_fond)  # On met la couleur de fond de la map
     cp.perso.lire_touches()  # Faire les déplacements/Animations
-    cp.map.afficher(cp.ecran)  # On affiche la map chaque tick pour actaliser
-    cp.perso.afficher(cp.ecran)  # On actualise la position du personnage
-    cp.map.afficher_4eme_couche(cp.ecran)  # On affiche la 4 eme couche opaque
+    cp.map.afficher()  # On affiche la map chaque tick pour actaliser
+    cp.perso.afficher()  # On actualise la position du personnage
+    cp.map.afficher_4eme_couche()  # On affiche la 4 eme couche opaque
 
 
 def event_pg(event):  # Events pygame
@@ -60,7 +60,7 @@ def event_pg(event):  # Events pygame
                     cp.plein_ecran = False  # Enregistrer le statut
                 else:  # Si on est déjà en fenêtre, mettre plein ecran
                     pg.display.set_mode((cp.ecran_x, cp.ecran_y),
-                                        pg.HWSURFACE)
+                                        pg.FULLSCREEN)
                     cp.plein_ecran = True   # Enregistrer le statut
 
         if event.type == pg.QUIT:  # Event : Touche enclenchée

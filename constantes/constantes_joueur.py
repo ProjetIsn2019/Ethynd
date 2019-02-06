@@ -7,6 +7,8 @@ Etc.
 import pygame as pg
 
 vitesse = 3.5
+largeur = 24
+hauteur = 32
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
 
 touches = {  # Les touches pour les déplacements
