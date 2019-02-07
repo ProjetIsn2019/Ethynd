@@ -6,9 +6,14 @@ Etc.
 """
 import pygame as pg
 
-vitesse = 3.5
-largeur = 24
-hauteur = 32
+vitesse = 3
+
+largeur_sprite = 64
+hauteur_sprite = 64
+
+largeur_hitbox = 26
+hauteur_hitbox = 45
+
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
 
 touches = {  # Les touches pour les déplacements
@@ -19,8 +24,7 @@ touches = {  # Les touches pour les déplacements
     pg.K_LEFT:  [vitesse, 0, "gauche", "marche", True],
     pg.K_DOWN:  [0, -vitesse, "bas", "marche", True],
     pg.K_RIGHT: [-vitesse, 0, "droite", "marche", True],
-    pg.K_x:     [0, 0, None, "examiner", True],
-    pg.K_w:     [0, 0, None, "attaque", False]
+    pg.K_x:     [0, 0, None, "attaque", False]
 }
 
 timings = {  # Timings des animations
