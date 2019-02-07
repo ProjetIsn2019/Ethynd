@@ -63,10 +63,15 @@ class Joueur:
         """
         # Je capture les dimensions de la fenêtre actuelle
         # Et je calcule les points centraux (moyenne)
-        y_decalage = -cj.hauteur/2  # Le décalage car l'image se génère
-        x_decalage = -cj.largeur/2  # A partir de son côté haut gauche
-        x_centre = cp.ecran.get_width()/2 + x_decalage   # Le x central
-        y_centre = cp.ecran.get_height()/2 + y_decalage  # Le y central
+        y_decalage = cj.hauteur_sprite/2  # Le décalage car l'image se génère
+        x_decalage = cj.largeur_sprite/2  # A partir de son côté haut gauche
+        x_centre = cp.ecran.get_width()/2 - x_decalage   # Le x central
+        y_centre = cp.ecran.get_height()/2 - y_decalage  # Le y central
+
+        y_decalage = cj.hauteur_hitbox/2  # Le décalage car l'image se génère
+        x_decalage = cj.largeur_hitbox/2  # A partir de son côté haut gauche
+        x_centre_hitbox = cp.ecran.get_width()/2 - x_decalage   # Le x central
+        y_centre_hitbox = cp.ecran.get_height()/2 - y_decalage  # Le y central
 
         # On vérifie si il y a un nombre de tick entre frame défini
         if cj.timings[self.mouvement][0] is None:  # Si il y en a pas
@@ -77,13 +82,13 @@ class Joueur:
             if self.compteur < cj.timings[self.mouvement][0]:
                 self.compteur = self.compteur + 1
                 # Sinon si il est déjà à son max
-            elif self.compteur == cj.timings[self.mouvement][0]:
+            else:
                 self.compteur = 0  # On le reset
                 # On incrémente la frame si besoin d'être incrémenté
                 if self.frame < cj.timings[self.mouvement][1]:
                     self.frame = self.frame + 1
                     # Sinon si elle est déjà a son max
-                elif self.frame == cj.timings[self.mouvement][1]:
+                else:
                     self.frame = 0  # Reset
                     self.libre = cj.timings[self.mouvement][2]  # Liberer perso
                     if cj.timings[self.mouvement][3]:  # Si on veux revenir
@@ -93,6 +98,7 @@ class Joueur:
         sprite = cj.animation[self.direction][self.mouvement]
         sprite = sprite[self.frame]  # On prend le bon sprite
         # Actualisation de la hitbox du personnage
-        self.hitbox = pg.Rect(x_centre, y_centre, cj.largeur, cj.hauteur)
+        self.hitbox = pg.Rect(x_centre_hitbox, y_centre_hitbox,
+                              cj.largeur_hitbox, cj.hauteur_hitbox)
         pg.draw.rect(cp.ecran, (0, 255, 0), self.hitbox)
-        #cp.ecran.blit(sprite, (x_centre, y_centre))  # Affiche le sprite
+        cp.ecran.blit(sprite, (x_centre, y_centre))  # Affiche le sprite
