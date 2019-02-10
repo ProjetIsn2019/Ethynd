@@ -45,7 +45,7 @@ class Map:
         # Pour le nombre de colonnes et de lignes on utilise la matrice du fond
         self.x = len(self.matrices[0][0])  # Nombre de colonnes
         self.y = len(self.matrices[0])     # Nombre de lignes
-        self.charger_collisions()  # Charger les collisions de la map
+        self.charger_masques()  # Charger les collisions de la map (Masques)
 
     def bouger(self, x, y):
         """Déplacer la map
@@ -87,7 +87,7 @@ class Map:
                     self.matrices[i].append(ligne)  # On ajoute la liste
             f.close()  # Fermer fichier
 
-    def charger_collisions(self):
+    def charger_masques(self):
         """ Crée les rectangles de collisions de la map
         Permets de charger les rectangles de collision de la map
         (Peut génèrer des latences !)
