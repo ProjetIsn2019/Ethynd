@@ -4,7 +4,7 @@ Variables etc.
 (A IMPORTER)
 """
 # Rappel, none = "vide".
-tps = 30                # Nombre de tick par seconde
+tps = 25                # Nombre de tick par seconde
 ecran = None            # L'écran principal
 perso = None            # Le personnage
 map = None              # La map

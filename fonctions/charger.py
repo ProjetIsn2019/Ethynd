@@ -32,12 +32,11 @@ def charger_sprite():
     Permets de charger les sprites du dictionnaire "info"
     """
     # Parcourir les animations PUIS les collisions
-    for type in (cj.animation, cj.collision):
-        for direction in type:  # Parcours des directions
-            for mouvement in type[direction]:  # Parcours des move
-                numero = 0  # Compteur utilisé dans le parcours des sprites
-                for sprite in type[direction][mouvement]:  # sprites
-                    if isinstance(sprite, str):  # Si le sprite est un txt
-                        img = pg.image.load(sprite).convert_alpha()  # Charger
-                        type[direction][mouvement][numero] = img  # Var
-                    numero += 1  # Numéro du sprite actuel + 1
+    for direction in cj.animation:  # Parcours des directions
+        for mouvement in cj.animation[direction]:  # Parcours des mouvements
+            numero = 0  # Compteur utilisé dans le parcours des sprites
+            for sprite in cj.animation[direction][mouvement]:  # Parcourir imgs
+                if isinstance(sprite, str):  # Si le sprite est un txt
+                    img = pg.image.load(sprite).convert_alpha()  # Charger
+                    cj.animation[direction][mouvement][numero] = img  # Sauver
+                numero += 1  # Numéro du sprite actuel + 1 (Le compteur)

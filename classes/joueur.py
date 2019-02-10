@@ -18,12 +18,7 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
         self.direction = "bas"   # Direction du personnage (bas par défaut)
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
-        # Configuration du premier masque...
-        image = cj.collision["bas"]["base"][0]  # Extraire l'image de collision
-        rect = image.get_rect(center=(cp.centre_x,   # Extraire le rectangle
-                                      cp.centre_y))  # de l'image
-        mask = pg.mask.from_surface(image)  # Ectraire le masque de l'image
-        self.masque = col.Masque("joueur", rect, mask)  # Masque du joueur
+        self.masque = col.Masque("joueur")  # Masque du joueur
 
     def lire_touches(self):
         """Lis ce que le joueur faitle
@@ -33,35 +28,49 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
         touches = pg.key.get_pressed()  # Touches enfoncées
         if not self.libre:  # Si le personnage est occupé
             return          # Quitter la fonction
+        if self.masque.mask is None:  # Si le masque est pas défini
+            return  # Quitter la fonction pour éviter un déplacement précoce
         for touche in cj.touches:  # Je parcours les touches enfoncées
             if touches[touche]:  # Si la touche est définie dans constantes
                 touche = cj.touches[touche]  # touche = sa liste correspondante
-                # Capturer les déplacements
-                deplacement_x = touche[0]  # Nombre de pixels en x
-                deplacement_y = touche[1]  # Nombre de pixels en x
-                # Déplacer la hitbox de la map, tester la position
-                cp.map.bouger_masque(deplacement_x, deplacement_y)
-                # Si il y a collision:
-                if self.masque.collision("tuile"):
-                    # Annuler le déplacment de la hitbox de la map
-                    cp.map.bouger_masque(-deplacement_x, -deplacement_y)
-                else:  # Sinon, si il y a pas collision
-                    cp.map.x_camera += deplacement_x  # Bouger la camera
-                    cp.map.y_camera += deplacement_y  # Bouger la camera
 
                 if touche[2] is not None:  # Si l'animation change la direction
                     self.direction = touche[2]  # Modif direction
-
                 if self.mouvement != touche[3]:  # Si le mouvement change
                     self.mouvement = touche[3]  # Changer le mouvement du perso
                     self.compteur = 0  # Recommencer les animations
                     self.frame = 0     # Réinitialiser les frames
-
                 self.libre = touche[4]  # Changer disponibilité du perso
+
+                # Capturer les déplacements
+                x = touche[0]  # Nombre de pixels en x
+                y = touche[1]  # Nombre de pixels en x
+                # Déplacer le masque pour tester la position
+                cp.map.bouger_masque(x, y)
+                if self.masque.collision("tuile"):  # Si il y a collision:
+                    # Annuler le déplacement de la hitbox de la map
+                    cp.map.bouger_masque(-x, -y)
+                else:  # Sinon, si il y a pas collision
+                    cp.map.x_camera += x  # Bouger la camera en x
+                    cp.map.y_camera += y  # Bouger la camera en y
+
                 break  # Casser la boucle: Touche trouvée. On évite les autres
+
         else:  # Si la boucle n'est pas cassée: Aucune touche trouvée
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
             self.libre = True  # Perso libre car pas de mouvement
+
+    def sprite(self):
+        """ Retourne le sprite et le met à jour """
+        # Charger la liste de sprites relative a la direction et le mouvement
+        sprite = cj.animation[self.direction][self.mouvement]
+        sprite = sprite[self.frame]  # Prendre le sprite correspondant
+        # Mettre à jour le rectangle du masque en créant un rectangle centré
+        self.masque.rect = sprite.get_rect(center=(cp.centre_x,
+                                                   cp.centre_y))
+        # Créer et assigner le masque
+        self.masque.mask = pg.mask.from_surface(sprite)
+        return sprite  # Retourner le sprite
 
     def afficher(self):
         """Affiche le personnage
@@ -92,15 +101,5 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
                     if cj.timings[self.mouvement][3]:  # Si on veux revenir
                         self.mouvement = "base"        # Sur base, on le fait
 
-        # Charger la liste de sprites relative a la direction et le mouvement
-        sprite_image = cj.animation[self.direction][self.mouvement]
-        sprite_image = sprite_image[self.frame]  # On prend le bon sprite
-        # Charger la liste d'images de collision relatives
-        sprite_collision = cj.collision[self.direction][self.mouvement]
-        sprite_collision = sprite_collision[self.frame]  # Choisir bon sprite
-        # Mettre à jour le rectangle du masque en créant un rectangle centré
-        self.masque.rect = sprite_collision.get_rect(center=(cp.centre_x,
-                                                             cp.centre_y))
-        # Créer et assigner le masque
-        self.masque.masque = pg.mask.from_surface(sprite_collision)
-        cp.ecran.blit(sprite_image, (x_rendu, y_rendu))  # Affiche le sprite
+        sprite = self.sprite()  # Charger le bon sprite
+        cp.ecran.blit(sprite, (x_rendu, y_rendu))  # Affiche le sprite
