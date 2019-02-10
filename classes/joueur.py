@@ -5,11 +5,11 @@ Auteur: Dorian Voland
 """
 from constantes import constantes_joueur as cj
 from constantes import constantes_partie as cp
-from constantes import constantes_tuiles as ct
+from classes import collision as col
 import pygame as pg
 
 
-class Joueur:
+class Joueur():  # L'objet joueur hérite de la classe Sprite
     def __init__(self):
         """Initialise le personnage
         """
@@ -18,7 +18,12 @@ class Joueur:
         self.direction = "bas"   # Direction du personnage (bas par défaut)
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
-        self.hitbox = None       # Hitbox du personnage
+        # Configuration du premier masque...
+        image = cj.collision["bas"]["base"][0]  # Extraire l'image de collision
+        rect = image.get_rect(center=(cp.centre_x,   # Extraire le rectangle
+                                      cp.centre_y))  # de l'image
+        mask = pg.mask.from_surface(image)  # Ectraire le masque de l'image
+        self.masque = col.Masque("joueur", rect, mask)  # Masque du joueur
 
     def lire_touches(self):
         """Lis ce que le joueur faitle
@@ -30,28 +35,29 @@ class Joueur:
             return          # Quitter la fonction
         for touche in cj.touches:  # Je parcours les touches enfoncées
             if touches[touche]:  # Si la touche est définie dans constantes
-                if self.hitbox is None:  # Si la hitbox est vide
-                    return  # Sortir de la fonction
+                touche = cj.touches[touche]  # touche = sa liste correspondante
                 # Capturer les déplacements
-                deplacement_x = cj.touches[touche][0]  # Nombre de pixels en x
-                deplacement_y = cj.touches[touche][1]  # Nombre de pixels en x
+                deplacement_x = touche[0]  # Nombre de pixels en x
+                deplacement_y = touche[1]  # Nombre de pixels en x
                 # Déplacer la hitbox de la map, tester la position
-                cp.map.bouger_hitbox(deplacement_x, deplacement_y)
-                # Si il y a pas de collisions:
-                if self.hitbox.collidelist(ct.hitbox_tuiles) == -1:
+                cp.map.bouger_masque(deplacement_x, deplacement_y)
+                # Si il y a collision:
+                if self.masque.collision("tuile"):
+                    # Annuler le déplacment de la hitbox de la map
+                    cp.map.bouger_masque(-deplacement_x, -deplacement_y)
+                else:  # Sinon, si il y a pas collision
                     cp.map.x_camera += deplacement_x  # Bouger la camera
                     cp.map.y_camera += deplacement_y  # Bouger la camera
-                else:  # Sinon, si il y a collision
-                    # Annuler le déplacment de la hitbox de la map
-                    cp.map.bouger_hitbox(-deplacement_x, -deplacement_y)
-                # Si l'animation a une direction ecran
-                if cj.touches[touche][2] is not None:
-                    self.direction = cj.touches[touche][2]  # Modif direction
-                # Si le mouvement change
-                if self.mouvement != cj.touches[touche][3]:
-                    self.mouvement = cj.touches[touche][3]  # Changer mouvement
-                    self.compteur = 0  # Recommencer les animation
-                self.libre = cj.touches[touche][4]  # Changer disponibilité
+
+                if touche[2] is not None:  # Si l'animation change la direction
+                    self.direction = touche[2]  # Modif direction
+
+                if self.mouvement != touche[3]:  # Si le mouvement change
+                    self.mouvement = touche[3]  # Changer le mouvement du perso
+                    self.compteur = 0  # Recommencer les animations
+                    self.frame = 0     # Réinitialiser les frames
+
+                self.libre = touche[4]  # Changer disponibilité du perso
                 break  # Casser la boucle: Touche trouvée. On évite les autres
         else:  # Si la boucle n'est pas cassée: Aucune touche trouvée
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
@@ -61,17 +67,9 @@ class Joueur:
         """Affiche le personnage
         Et gère ses animations
         """
-        # Je capture les dimensions de la fenêtre actuelle
-        # Et je calcule les points centraux (moyenne)
-        y_decalage = cj.hauteur_sprite/2  # Le décalage car l'image se génère
-        x_decalage = cj.largeur_sprite/2  # A partir de son côté haut gauche
-        x_centre = cp.ecran.get_width()/2 - x_decalage   # Le x central
-        y_centre = cp.ecran.get_height()/2 - y_decalage  # Le y central
-
-        y_decalage = cj.hauteur_hitbox/2  # Le décalage car l'image se génère
-        x_decalage = cj.largeur_hitbox/2  # A partir de son côté haut gauche
-        x_centre_hitbox = cp.ecran.get_width()/2 - x_decalage   # Le x central
-        y_centre_hitbox = cp.ecran.get_height()/2 - y_decalage  # Le y central
+        # Je calcule la position de rendu du sprite afin qu'il soit bien centré
+        x_rendu = cp.centre_x - cj.hauteur_sprite/2  # Le x de rendu
+        y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
 
         # On vérifie si il y a un nombre de tick entre frame défini
         if cj.timings[self.mouvement][0] is None:  # Si il y en a pas
@@ -95,10 +93,14 @@ class Joueur:
                         self.mouvement = "base"        # Sur base, on le fait
 
         # Charger la liste de sprites relative a la direction et le mouvement
-        sprite = cj.animation[self.direction][self.mouvement]
-        sprite = sprite[self.frame]  # On prend le bon sprite
-        # Actualisation de la hitbox du personnage
-        self.hitbox = pg.Rect(x_centre_hitbox, y_centre_hitbox,
-                              cj.largeur_hitbox, cj.hauteur_hitbox)
-        pg.draw.rect(cp.ecran, (0, 255, 0), self.hitbox)
-        cp.ecran.blit(sprite, (x_centre, y_centre))  # Affiche le sprite
+        sprite_image = cj.animation[self.direction][self.mouvement]
+        sprite_image = sprite_image[self.frame]  # On prend le bon sprite
+        # Charger la liste d'images de collision relatives
+        sprite_collision = cj.collision[self.direction][self.mouvement]
+        sprite_collision = sprite_collision[self.frame]  # Choisir bon sprite
+        # Mettre à jour le rectangle du masque en créant un rectangle centré
+        self.masque.rect = sprite_collision.get_rect(center=(cp.centre_x,
+                                                             cp.centre_y))
+        # Créer et assigner le masque
+        self.masque.masque = pg.mask.from_surface(sprite_collision)
+        cp.ecran.blit(sprite_image, (x_rendu, y_rendu))  # Affiche le sprite

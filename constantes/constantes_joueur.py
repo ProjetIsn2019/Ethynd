@@ -7,15 +7,10 @@ Etc.
 import pygame as pg
 
 vitesse = 3
-
 largeur_sprite = 64
 hauteur_sprite = 64
-
-largeur_hitbox = 26
-hauteur_hitbox = 45
-
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
-
+###############################################################################
 touches = {  # Les touches pour les déplacements
     # [0, 0, "direction", "mouvement", libre]
     # Nombre de pixels en x, nombre de pixels en y, direction, mouvement.
@@ -24,9 +19,9 @@ touches = {  # Les touches pour les déplacements
     pg.K_LEFT:  [vitesse, 0, "gauche", "marche", True],
     pg.K_DOWN:  [0, -vitesse, "bas", "marche", True],
     pg.K_RIGHT: [-vitesse, 0, "droite", "marche", True],
-    pg.K_x:     [0, 0, None, "attaque", False]
+    pg.K_w:     [0, 0, None, "attaque", False],
 }
-
+###############################################################################
 timings = {  # Timings des animations
     # [tick, images, libre, reset]
     # tick = le nombre de tick pour changer une frame (Tick entre chaque frame)
@@ -35,10 +30,9 @@ timings = {  # Timings des animations
     # reset = revenir sur base après la fin de l'animation ? (Sinon on répète)
     "base": [None],  # Si tick = None, alors il y a aucun attribut d'animation
     "marche": [4, 3, True, False],
-    "attaque": [2, 3, True, True],
-    "examiner": [1, 0, True, False]
+    "attaque": [1, 3, True, True],
 }
-
+###############################################################################
 animation = {  # Repertorier les sprites
     # Animation marche : 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 [...]
     "bas": {
@@ -57,9 +51,6 @@ animation = {  # Repertorier les sprites
             sprite + "1_46.png",  # Attaque 3
             sprite + "1_47.png"   # Attaque 4
         ],
-        "examiner": [
-            sprite + "1_04.png",  # Examiner
-        ]
     },
     "droite": {
         "base": [
@@ -77,9 +68,6 @@ animation = {  # Repertorier les sprites
             sprite + "1_54.png",  # Attaque 3
             sprite + "1_55.png"   # Attaque 4
         ],
-        "examiner": [
-            sprite + "1_15.png",  # Examiner
-        ]
     },
 
     "haut": {
@@ -98,9 +86,6 @@ animation = {  # Repertorier les sprites
             sprite + "1_50.png",  # Attaque 3
             sprite + "1_51.png"   # Attaque 4
         ],
-        "examiner": [
-            sprite + "1_26.png",  # Examiner
-        ]
     },
 
     "gauche": {
@@ -119,8 +104,81 @@ animation = {  # Repertorier les sprites
             sprite + "1_58.png",  # Attaque 3
             sprite + "1_59.png"   # Attaque 4
         ],
-        "examiner": [
-            sprite + "1_37.png",  # Examiner
-        ]
+    }
+}
+###############################################################################
+###############################################################################
+###############################################################################
+collision = {  # Repertorier les sprites de collision
+    # Animation marche : 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 [...]
+    "bas": {
+        "base": [
+            sprite + "1.png"   # Base
+        ],
+        "marche": [
+            sprite + "1.png",  # Marche 1
+            sprite + "1.png",  # Marche 2
+            sprite + "1.png",  # Marche 3
+            sprite + "1.png"   # Marche 4
+        ],
+        "attaque": [
+            sprite + "1.png",  # Attaque 1
+            sprite + "1.png",  # Attaque 2
+            sprite + "1.png",  # Attaque 3
+            sprite + "1.png"   # Attaque 4
+        ],
+    },
+    "droite": {
+        "base": [
+            sprite + "1.png"   # Base
+        ],
+        "marche": [
+            sprite + "1.png",  # Marche 1
+            sprite + "1.png",  # Marche 2
+            sprite + "1.png",  # Marche 3
+            sprite + "1.png"   # Marche 4
+        ],
+        "attaque": [
+            sprite + "1.png",  # Attaque 1
+            sprite + "1.png",  # Attaque 2
+            sprite + "1.png",  # Attaque 3
+            sprite + "1.png"   # Attaque 4
+        ],
+    },
+
+    "haut": {
+        "base": [
+            sprite + "1.png"   # Base
+        ],
+        "marche": [
+            sprite + "1.png",  # Marche 1
+            sprite + "1.png",  # Marche 2
+            sprite + "1.png",  # Marche 3
+            sprite + "1.png"   # Marche 4
+        ],
+        "attaque": [
+            sprite + "1.png",  # Attaque 1
+            sprite + "1.png",  # Attaque 2
+            sprite + "1.png",  # Attaque 3
+            sprite + "1.png"   # Attaque 4
+        ],
+    },
+
+    "gauche": {
+        "base": [
+            sprite + "1.png"   # Base
+        ],
+        "marche": [
+            sprite + "1.png",  # Marche 1
+            sprite + "1.png",  # Marche 2
+            sprite + "1.png",  # Marche 3
+            sprite + "1.png"   # Marche 4
+        ],
+        "attaque": [
+            sprite + "1.png",  # Attaque 1
+            sprite + "1.png",  # Attaque 2
+            sprite + "1.png",  # Attaque 3
+            sprite + "1.png"   # Attaque 4
+        ],
     }
 }

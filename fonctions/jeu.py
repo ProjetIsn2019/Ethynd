@@ -19,8 +19,10 @@ def initialiser_jeu():
                                    pg.FULLSCREEN)   # affiche la fenêtre
     cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
     cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
+    cp.centre_x = cp.ecran_x/2  # Milieu x écran
+    cp.centre_y = cp.ecran_y/2  # Milieu y écran
 
-    cp.plein_ecran = True  # Notre variable plein écran pour pouvoir le changer
+    cp.plein_ecran = True  # Notre variable plein écran pour pouvoir changer
     cp.jouer = True  # On ne veux pas quitter le jeu dès le départ :')
     cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
 
@@ -62,6 +64,12 @@ def event_pg(event):  # Events pygame
                     pg.display.set_mode((cp.ecran_x, cp.ecran_y),
                                         pg.FULLSCREEN)
                     cp.plein_ecran = True   # Enregistrer le statut
+                # Je recalcule le centre de l'écran
+                cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
+                cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
+                cp.centre_x = cp.ecran_x/2  # Milieu x écran
+                cp.centre_y = cp.ecran_y/2  # Milieu y écran
+                cp.map.charger_collisions()  # Charger les collisions
 
         if event.type == pg.QUIT:  # Event : Touche enclenchée
             cp.jouer = False  # On quitte
