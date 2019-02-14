@@ -58,18 +58,21 @@ def event_pg(event):  # Events pygame
                 # On veut pouvoir changer le mode plein écran en jeu
                 # C'est possible avec ces instructions
                 if cp.plein_ecran:  # Si on est déjà en plein écran, changer
-                    pg.display.set_mode((680, 480), pg.NOFRAME)
+                    pg.display.set_mode((680, 480), pg.RESIZABLE)
                     cp.plein_ecran = False  # Enregistrer le statut
                 else:  # Si on est déjà en fenêtre, mettre plein ecran
                     pg.display.set_mode((cp.ecran_x, cp.ecran_y),
                                         pg.FULLSCREEN)
                     cp.plein_ecran = True   # Enregistrer le statut
-                # Je recalcule le centre de l'écran
-                cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
-                cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
-                cp.centre_x = cp.ecran_x/2  # Milieu x écran
-                cp.centre_y = cp.ecran_y/2  # Milieu y écran
-                cp.map.charger_collisions()  # Charger les collisions
 
+        if event.type == pg.VIDEORESIZE:  # Si on redimensionne la fenêtre
+            # Je recalcule le centre de l'écran
+            cp.ecran_x = cp.ecran.get_width()  # Taille de l'écran
+            cp.ecran_y = cp.ecran.get_height()  # Taille de l'écran
+            cp.centre_x = cp.ecran_x/2  # Milieu x écran
+            cp.centre_y = cp.ecran_y/2  # Milieu y écran
+            cp.map.charger_masques()  # Charger les collisions
+
+        
         if event.type == pg.QUIT:  # Event : Touche enclenchée
             cp.jouer = False  # On quitte
