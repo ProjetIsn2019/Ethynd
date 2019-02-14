@@ -9,10 +9,11 @@ from classes import collision as col
 import pygame as pg
 
 
-class Joueur():  # L'objet joueur hérite de la classe Sprite
+class Joueur():  # L'objet joueur
     def __init__(self):
         """Initialise le personnage
         """
+        self.sprite = None  # Sprite du personnagecv 
         self.compteur = 0  # Compteur animations
         self.frame = 0     # Numero de la frame du sprite
         self.direction = "bas"   # Direction du personnage (bas par défaut)
@@ -41,7 +42,7 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
                     self.compteur = 0  # Recommencer les animations
                     self.frame = 0     # Réinitialiser les frames
                 self.libre = touche[4]  # Changer disponibilité du perso
-
+ 
                 # Capturer les déplacements
                 x = touche[0]  # Nombre de pixels en x
                 y = touche[1]  # Nombre de pixels en x
@@ -53,33 +54,15 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
                 else:  # Sinon, si il y a pas collision
                     cp.map.x_camera += x  # Bouger la camera en x
                     cp.map.y_camera += y  # Bouger la camera en y
-
+                
                 break  # Casser la boucle: Touche trouvée. On évite les autres
 
         else:  # Si la boucle n'est pas cassée: Aucune touche trouvée
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
             self.libre = True  # Perso libre car pas de mouvement
 
-    def sprite(self):
-        """ Retourne le sprite et le met à jour """
-        # Charger la liste de sprites relative a la direction et le mouvement
-        sprite = cj.animation[self.direction][self.mouvement]
-        sprite = sprite[self.frame]  # Prendre le sprite correspondant
-        # Mettre à jour le rectangle du masque en créant un rectangle centré
-        self.masque.rect = sprite.get_rect(center=(cp.centre_x,
-                                                   cp.centre_y))
-        # Créer et assigner le masque
-        self.masque.mask = pg.mask.from_surface(sprite)
-        return sprite  # Retourner le sprite
-
-    def afficher(self):
-        """Affiche le personnage
-        Et gère ses animations
-        """
-        # Je calcule la position de rendu du sprite afin qu'il soit bien centré
-        x_rendu = cp.centre_x - cj.hauteur_sprite/2  # Le x de rendu
-        y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
-
+    def actualiser_frame(self):
+        # MISE A JOUR DES FRAMES EN FONCTION DES TICKS
         # On vérifie si il y a un nombre de tick entre frame défini
         if cj.timings[self.mouvement][0] is None:  # Si il y en a pas
             self.compteur = 0
@@ -100,6 +83,30 @@ class Joueur():  # L'objet joueur hérite de la classe Sprite
                     self.libre = cj.timings[self.mouvement][2]  # Liberer perso
                     if cj.timings[self.mouvement][3]:  # Si on veux revenir
                         self.mouvement = "base"        # Sur base, on le fait
+    
+    def actualiser_sprite(self):
+        """ Met à jour le sprite
+        Mise à jour du sprite en fonction de:
+            - La direction
+            - Le mouvement
+            - La frame
+        """
+        # CHARGEMENT DE L'IMAGE DU SPRITE
+        # Charger la liste de sprites relative a la direction et le mouvement
+        sprite = cj.animation[self.direction][self.mouvement]
+        self.sprite = sprite[self.frame]  # Prendre le sprite correspondant
+        # Mettre à jour le rectangle du masque en créant un rectangle centré
+        self.masque.rect = self.sprite.get_rect(center=(cp.centre_x,
+                                                        cp.centre_y))
+        # Créer et assigner le masque
+        self.masque.mask = pg.mask.from_surface(self.sprite)
 
-        sprite = self.sprite()  # Charger le bon sprite
-        cp.ecran.blit(sprite, (x_rendu, y_rendu))  # Affiche le sprite
+    def afficher(self):
+        """Affiche le personnage"""
+        self.actualiser_frame()  # Actualiser les frames
+        self.actualiser_sprite()  # Actualiser le sprite
+        # Je calcule la position de rendu du sprite afin qu'il soit bien centré
+        x_rendu = cp.centre_x - cj.hauteur_sprite/2  # Le x de rendu
+        y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
+
+        cp.ecran.blit(self.sprite, (x_rendu, y_rendu))  # Affiche le sprite
