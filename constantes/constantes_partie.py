@@ -15,5 +15,6 @@ centre_x = None         # Coordonnées du milieu de l'écran (Largeur)
 centre_y = None         # Coordonnées du milieu de l'écran (Hauteur)
 jouer = None            # Si le jeu est toujours actif
 horloge = None          # Règle les tick du jeu*
-son = None              # Variable qui stocke le son 
+musique = None          # Variable qui stocke la musique
+
 
