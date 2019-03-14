@@ -20,7 +20,7 @@ class Map:
     ++ Support transparence.
     """
 
-    def __init__(self, nom, camera=(0, 0), couleur_fond=(40, 38, 51)):
+    def __init__(self, nom, camera=(0, 0), musique=None couleur_fond=(40, 38, 51)):
         """Initialise la map
         Avec un nom, la position de la camera, la couleur de fond
         Ajoute une hitbox pour les collisions et convertis le fichier de la map
@@ -30,6 +30,11 @@ class Map:
         Les couches 0 1 et 2 sont pour les collisions et les graphismes
         """
         x, y = camera  # On extrait les coordonnées de la tuple
+        if cp.musique is not None:  # Si une musique est jouée
+            cp.musique.stop()   # Alors arrêter cette musique
+        if musique is not None: # Si une musique est donnée dans les paramètres 
+            cp.musique = pg.mixer.Sound(musique)    # Récuperer la musique sous forme de variable
+            cp.musique.play()   # Jouer la musique 
         self.nom = nom  # Définition du nom de la map
         self.x_camera = x  # Camera X (position)
         self.y_camera = y  # Camera Y (position)
