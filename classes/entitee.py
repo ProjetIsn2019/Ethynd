@@ -19,7 +19,7 @@ class Entitee(object):
         self.pos_encienne_cam = [cp.map.x_camera, cp.map.y_camera]
         self.position = [cp.map.x_camera, cp.map.y_camera]
         self.id = id 
-        self.taille = [0,0]
+        self.taille = [1,1]
 
         self.compteur = 0  # Compteur animations
         self.compteur_action = 0
@@ -56,7 +56,14 @@ class Entitee(object):
                         img = pg.image.load(sprite).convert_alpha()  # Charger
                         animation[direction][mouvement][numero] = img  # Var
                     numero += 1  # Numéro du sprite actuel + 1
-
+    def bouger_masque(self, coord):
+        """ Gere le mouvement du masque
+        """
+        self.masque.rect = self.sprite.get_rect(center=(self.position[0] + coord[0] + self.taille[0]/2,
+                                                        self.position[1] + coord[1] + self.taille[1]/2))
+        self.masque.mask = pg.mask.from_surface(self.sprite)
+        
+        # pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
     def deplacement(self):
         """ Défini le mouvement de base
         pour une entitée la fait tourner sur elle meme
@@ -109,11 +116,9 @@ class Entitee(object):
         # On prend le bon sprite
         self.sprite = animation[self.frame]  
         # On actualise le masque
-        self.masque.rect = self.sprite.get_rect(center=(self.position[0],
-                                                        self.position[1]))
-        # Créer et assigner le masque
-        self.masque.mask = pg.mask.from_surface(self.sprite)
+        self.bouger_masque((0, 0))
 
+        pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
     def afficher(self):
         """ Procedure qui gere l'affichage de mon personnage
         Gère l'affichage des animations
@@ -127,16 +132,16 @@ class Entitee(object):
         cp.ecran.blit(self.sprite, (x, y))  
 
 
-
 class Monstre(Entitee):
     """ Classe Monstre qui herite de Entitee
             redefini methode déplacement() ==> type_deplacement: - aleatoire
                                                                  - base
                                                                  - zone (en cours)
     """
-    def __init__(self, id, position, type_deplacement):
+    def __init__(self, id, position, taille ,type_deplacement, ):
         monstre = "monstre_"+ str(id)
         super(Monstre, self).__init__(monstre)
+        self.taille = taille
         self.position = position
         self.masque = col.Masque("Monstre")
         self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
@@ -150,6 +155,9 @@ class Monstre(Entitee):
     def deplacement(self):
         """ Gere deplacement d'un monstre
         """    
+        if self.masque.mask is None:  # Si le masque est pas défini
+            return  # Quitter la fonction pour éviter un déplacement précoce
+
         if self.compteur_action >= len(ce.deplacement[self.type_deplacement]): # On reinitialise le compteur d'action
             self.compteur_action = 0
      
@@ -162,19 +170,22 @@ class Monstre(Entitee):
         delta_x = cp.map.x_camera - self.pos_ancienne_cam[0] # Delta camera x
         delta_y = cp.map.y_camera - self.pos_ancienne_cam[1] # Delta camera y
 
+        #Donne la valeur des deplacement ex + 4 px
+        deplacement_x = ce.action[action][0] 
+        deplacement_y = ce.action[action][1]
+
         # Donne valeur du prochain deplacement
-        x = self.position[0] + delta_x - ce.action[action][0] 
-        y = self.position[1] + delta_y - ce.action[action][1]
+        x = self.position[0] + delta_x + deplacement_x
+        y = self.position[1] + delta_y + deplacement_y
 
-        # cp.map.bouger_masque(x, y)
-        # if self.masque.collision("tuile"):  # Si il y a collision:
-        #     # Annuler le déplacement de la hitbox de la map
-        #     cp.map.bouger_masque(-x, -y)
-        # else:  # Sinon, si il y a pas collision
-
-        # On actualise les positon
-        self.position[0] = x  #en x
-        self.position[1] = y  #en y
+        self.bouger_masque((deplacement_x, deplacement_y))
+        if not self.masque.collision("tuile"):  # S'il n'y a pas:
+            # On actualise les positon
+            self.position[0] = x   #en x
+            self.position[1] = y  #en y
+            print("je passe")
+        
+        self.bouger_masque((-deplacement_x, -deplacement_y))     
 
         # On actualise la camera
         self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
