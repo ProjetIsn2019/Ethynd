@@ -22,15 +22,18 @@ timings = { # Timings des animations
     }
 }
 action = {
-    "haut":    [0, vitesse, "haut", "marche", True],
-    "gauche":  [vitesse, 0, "gauche", "marche", True],
-    "bas":  [0, -vitesse, "bas", "marche", True],
-    "droite": [-vitesse, 0, "droite", "marche", True],
+    "haut":    [0, -vitesse, "haut", "marche", True],
+    "gauche":  [-vitesse, 0, "gauche", "marche", True],
+    "bas":  [0, vitesse, "bas", "marche", True],
+    "droite": [vitesse, 0, "droite", "marche", True],
     "attaque":     [0, 0, None, "attaque", False]
 }
 deplacement = {
     "base" : [
-        "droite", "bas", "gauche", "haut"
+        "haut", "gauche", "bas", "droite"
+    ],
+    "trajet" : [
+    	"droite", "gauche", "bas", "droite"
     ],
     "aleatoire" : [
     		0,1,2,3
