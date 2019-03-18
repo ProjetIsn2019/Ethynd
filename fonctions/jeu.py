@@ -32,7 +32,7 @@ def initialiser_jeu():
 
     cp.map = mapping.Map("maps/test3")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
-    cp.monstre = entitee.Monstre("dragon_rouge", [500,500], "aleatoire")
+    cp.monstre = entitee.Monstre("dragon_rouge", [510,200], [57,57],"aleatoire")
 
 def boucle_de_jeu():
     """ Boucle de jeu
