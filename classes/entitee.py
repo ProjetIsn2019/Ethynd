@@ -68,17 +68,44 @@ class Entitee(object):
     def deplacement(self):
         """ Défini le mouvement de base
         pour une entitée la fait tourner sur elle meme
-        """
-        # On calcule le delta de la camera
-        delta_x = cp.map.x_camera - self.pos_ancienne_cam[0] # calcule delta camera x
-        delta_y = cp.map.y_camera - self.pos_ancienne_cam[1] # calcule delta camera y
+        """  
+        if self.masque.mask is None:  # Si le masque est pas défini
+            return  # Quitter la fonction pour éviter un déplacement précoce
 
-        # On donne la nouvel position si la camera bouge
-        self.position[0] = self.position[0] + delta_x           # On affecte la nouvelle position
-        self.position[1] = self.position[1] + delta_y           # en x et y    
+        if self.compteur_action >= len(ce.deplacement[self.type_deplacement]): # On reinitialise le compteur d'action
+            self.compteur_action = 0
+     
+        # Charge le type deplacement
+        action = ce.deplacement["base"][self.compteur_action]             
+        self.mouvement = "marche"
+        self.direction = action
+
+        #Calcul du delta de la camera entre deux frame
+        delta_x = cp.map.x_camera - self.pos_ancienne_cam[0] # Delta camera x
+        delta_y = cp.map.y_camera - self.pos_ancienne_cam[1] # Delta camera y
+
+        #Donne la valeur des deplacement ex: + 4 px
+        deplacement_x = ce.action[action][0]  # en x
+        deplacement_y = ce.action[action][1]  # en y
+
+        # Donne la position du prochain déplacement
+        x = self.position[0] + delta_x + deplacement_x
+        y = self.position[1] + delta_y + deplacement_y
+
+        # On bouge le masque a cette emplacement
+        self.bouger_masque((deplacement_x, deplacement_y))
+        if not self.masque.collision("tuile"):  # S'il n'y a pas:
+            # On actualise les positon
+            self.position[0] = x   #en x
+            self.position[1] = y  #en y
+        else:
+            self.position[0] = x - deplacement_x   #en x
+            self.position[1] = y - deplacement_y #en y
+        self.bouger_masque((-deplacement_x, -deplacement_y))     
 
         # On actualise la camera
-        self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]  
+        self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
+
                 
     def actualiser_frame(self):
         # charge attribut mouvement en cours
@@ -118,7 +145,7 @@ class Entitee(object):
         self.sprite = animation[self.frame]  
         # On actualise le masque
         self.bouger_masque((0, 0))
-        
+
         cc.groupes["Monstre"] = [self.masque]
 
         pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
@@ -158,42 +185,4 @@ class Monstre(Entitee):
         """
         print("Chargement du monstre : " + self.id + "...")
         
-    def deplacement(self):
-        """ Gere deplacement d'un monstre
-        """    
-        if self.masque.mask is None:  # Si le masque est pas défini
-            return  # Quitter la fonction pour éviter un déplacement précoce
-
-        if self.compteur_action >= len(ce.deplacement[self.type_deplacement]): # On reinitialise le compteur d'action
-            self.compteur_action = 0
-     
-        # Charge le type deplacement
-        action = ce.deplacement["base"][self.compteur_action]             
-        self.mouvement = "marche"
-        self.direction = action
-
-        #Calcul du delta de la camera entre deux frame
-        delta_x = cp.map.x_camera - self.pos_ancienne_cam[0] # Delta camera x
-        delta_y = cp.map.y_camera - self.pos_ancienne_cam[1] # Delta camera y
-
-        #Donne la valeur des deplacement ex + 4 px
-        deplacement_x = ce.action[action][0] 
-        deplacement_y = ce.action[action][1]
-
-        # Donne valeur du prochain deplacement
-        x = self.position[0] + delta_x + deplacement_x
-        y = self.position[1] + delta_y + deplacement_y
-
-        self.bouger_masque((deplacement_x, deplacement_y))
-        if not self.masque.collision("tuile"):  # S'il n'y a pas:
-            # On actualise les positon
-            self.position[0] = x   #en x
-            self.position[1] = y  #en y
-        else:
-            self.position[0] = x - deplacement_x   #en x
-            self.position[1] = y - deplacement_y #en y
-        self.bouger_masque((-deplacement_x, -deplacement_y))     
-
-        # On actualise la camera
-        self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
 
