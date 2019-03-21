@@ -30,11 +30,6 @@ class Map:
         Les couches 0 1 et 2 sont pour les collisions et les graphismes
         """
         x, y = camera  # On extrait les coordonnées de la tuple
-        if cp.musique is not None:  # Si une musique est jouée
-            cp.musique.stop()   # Alors arrêter cette musique
-        if musique is not None: # Si une musique est donnée dans les paramètres 
-            cp.musique = pg.mixer.Sound(musique)    # Récuperer la musique sous forme de variable
-            cp.musique.play()   # Jouer la musique 
         self.nom = nom  # Définition du nom de la map
         self.x_camera = x  # Camera X (position)
         self.y_camera = y  # Camera Y (position)
@@ -51,6 +46,12 @@ class Map:
         self.x = len(self.matrices[0][0])  # Nombre de colonnes
         self.y = len(self.matrices[0])     # Nombre de lignes
         self.charger_masques()  # Charger les collisions de la map (Masques)
+        
+        if cp.musique is not None:  # Si une musique est jouée
+            cp.musique.stop()   # Alors arrêter cette musique
+        if musique is not None: # Si une musique est donnée dans les paramètres 
+            cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme de variable
+            cp.musique.play()   # Jouer la musique 
 
     def bouger(self, x, y):
         """Déplacer la map
