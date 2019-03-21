@@ -50,7 +50,7 @@ class Map:
         if cp.musique is not None:  # Si une musique est jouée
             cp.musique.stop()   # Alors arrêter cette musique
         if musique is not None: # Si une musique est donnée dans les paramètres 
-            cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme de variable
+            cp.musique = pg.mixer.Sound(musique)  # Récuperer la musique sous forme de variable
             cp.musique.play()   # Jouer la musique 
 
     def bouger(self, x, y):
