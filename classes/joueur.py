@@ -23,6 +23,7 @@ class Joueur():  # L'objet joueur
         self.masque = col.Masque("joueur")  # Masque du joueur
 
         self.vie = 10
+        self.blesser = False
 
     def lire_touches(self):
         """Lis ce que le joueur faitle
@@ -67,9 +68,11 @@ class Joueur():  # L'objet joueur
     def enlever_vie(self, ennemi):
         """ Enleve de la vie au joueur si il prend des dégats
         """
-        if self.masque.collision("Monstre"):
+        if self.masque.collision("Monstre") and not self.blesser:
+            self.blesser = True
             self.vie -= ennemi.attaque
-        print(self.vie)
+        elif not self.masque.collision("Monstre") and self.blesser:
+            self.blesser = False
 
     def actualiser_frame(self):
         # MISE A JOUR DES FRAMES EN FONCTION DES TICKS
