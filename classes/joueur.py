@@ -5,6 +5,7 @@ Auteur: Dorian Voland
 """
 from constantes import constantes_joueur as cj
 from constantes import constantes_partie as cp
+from constantes import constantes_collisions as cc
 from classes import collision as col
 import pygame as pg
 
@@ -20,6 +21,8 @@ class Joueur():  # L'objet joueur
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
         self.masque = col.Masque("joueur")  # Masque du joueur
+
+        self.vie = 10
 
     def lire_touches(self):
         """Lis ce que le joueur faitle
@@ -61,6 +64,13 @@ class Joueur():  # L'objet joueur
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
             self.libre = True  # Perso libre car pas de mouvement
 
+    def enlever_vie(self, ennemi):
+        """ Enleve de la vie au joueur si il prend des dégats
+        """
+        if self.masque.collision("Monstre"):
+            self.vie -= ennemi.attaque
+        print(self.vie)
+
     def actualiser_frame(self):
         # MISE A JOUR DES FRAMES EN FONCTION DES TICKS
         # On vérifie si il y a un nombre de tick entre frame défini
@@ -101,8 +111,12 @@ class Joueur():  # L'objet joueur
         # Créer et assigner le masque
         self.masque.mask = pg.mask.from_surface(self.sprite)
 
+        cc.groupes["joueur"] = [self.masque]
+
+
     def afficher(self):
         """Affiche le personnage"""
+
         self.actualiser_frame()  # Actualiser les frames
         self.actualiser_sprite()  # Actualiser le sprite
         # Je calcule la position de rendu du sprite afin qu'il soit bien centré
@@ -110,3 +124,8 @@ class Joueur():  # L'objet joueur
         y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
 
         cp.ecran.blit(self.sprite, (x_rendu, y_rendu))  # Affiche le sprite
+        
+        pg.draw.rect(cp.ecran, (255,0,0), pg.Rect( 10 , 10, 50* self.vie, 50))
+    def afficher_interface(self):
+        #vie:
+        pass

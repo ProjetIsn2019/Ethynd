@@ -3,6 +3,7 @@ from constantes import constantes_partie as cp
 from constantes import constantes_tuiles as ct
 from constantes import constantes_entitee as ce
 from constantes import constantes_joueur as cj
+from constantes import constantes_collisions as cc
 from classes import collision as col
 import random as rd
 class Entitee(object):
@@ -117,6 +118,8 @@ class Entitee(object):
         self.sprite = animation[self.frame]  
         # On actualise le masque
         self.bouger_masque((0, 0))
+        
+        cc.groupes["Monstre"] = [self.masque]
 
         pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
     def afficher(self):
@@ -138,7 +141,7 @@ class Monstre(Entitee):
                                                                  - base
                                                                  - zone (en cours)
     """
-    def __init__(self, id, position, taille ,type_deplacement, ):
+    def __init__(self, id, position, taille ,type_deplacement, vie, attaque):
         monstre = "monstre_"+ str(id)
         super(Monstre, self).__init__(monstre)
         self.taille = taille
@@ -146,6 +149,9 @@ class Monstre(Entitee):
         self.masque = col.Masque("Monstre")
         self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
         self.type_deplacement = type_deplacement
+
+        self.vie = vie
+        self.attaque = attaque
 
     def chargement(self):
         """ Procedure qui affiche le chargement d'un monstre
@@ -183,8 +189,9 @@ class Monstre(Entitee):
             # On actualise les positon
             self.position[0] = x   #en x
             self.position[1] = y  #en y
-            print("je passe")
-        
+        else:
+            self.position[0] = x - deplacement_x   #en x
+            self.position[1] = y - deplacement_y #en y
         self.bouger_masque((-deplacement_x, -deplacement_y))     
 
         # On actualise la camera
