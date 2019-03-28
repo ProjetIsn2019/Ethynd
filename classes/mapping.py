@@ -20,7 +20,7 @@ class Map:
     ++ Support transparence.
     """
 
-    def __init__(self, nom, camera=(0, 0), musique=None, couleur_fond=(40, 38, 51)):
+    def __init__(self, nom, musique=None, camera=(0, 0), couleur_fond=(40, 38, 51)):
         """Initialise la map
         Avec un nom, la position de la camera, la couleur de fond
         Ajoute une hitbox pour les collisions et convertis le fichier de la map
@@ -40,19 +40,50 @@ class Map:
             2: [],  # Matrice qui stockera le 1er plan
             3: []   # Matrice qui stockera le plan spécial
         }
-
         self.charger_matrice()  # Chargement de la matrice, du fichier carte
         # Pour le nombre de colonnes et de lignes on utilise la matrice du fond
-        self.x = len(self.matrices[0][0])  # Nombre de colonnes
-        self.y = len(self.matrices[0])     # Nombre de lignes
+        self.x = len(self.matrices[0][0])  # Variable contenant le nombre de colonnes
+        self.y = len(self.matrices[0])     # Variable contenant le nombre de colonnes
+        # Variable contenant l'arrière plan de la map (pg.SCRALPHA permet de rendre la surface transparente)
+        self.arriere_plan = pg.Surface((self.x*32, self.y*32), pg.SRCALPHA)  # On crée une surface de la taille de la map
+        # Variable contenant le premier plan de la map 
+        self.premier_plan = pg.Surface((self.x*32, self.y*32), pg.SRCALPHA)  # On crée une surface de la taille de la map
         self.charger_masques()  # Charger les collisions de la map (Masques)
+        self.charger_arriere_plan()  # Charger l'arrière plan
+        self.charger_premier_plan()  # Charger le premier plan
         
         if cp.musique is not None:  # Si une musique est jouée
             cp.musique.stop()   # Alors arrêter cette musique
         if musique is not None: # Si une musique est donnée dans les paramètres 
-            cp.musique = pg.mixer.Sound(musique)  # Récuperer la musique sous forme de variable
+            cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme de variable
             cp.musique.play()   # Jouer la musique 
 
+    def afficher_arriere_plan(self):
+        """ Affiche les 3 premières couches de la map
+        3 premières couches (0,1,2) = Arrière plan
+        """
+        cp.ecran.blit(self.arriere_plan, (self.x_camera, 
+                                          self.y_camera)) #Affiche le premier plan
+        
+    def afficher_premier_plan(self):
+        """ Affiche la 4 eme couche de la map
+        Quatrième couche (3) = Premier plan devant le personnage
+        """
+        cp.ecran.blit(self.premier_plan, (self.x_camera, 
+                                          self.y_camera)) #Affiche le premier plan
+        
+    def bouger_masque(self, x, y):
+        """Déplace les masques de collision
+        Permets de déplacer les masques de collisions, utilisé lors du
+        Déplacement du personnage ou de la camera
+        """
+        nouvelle_liste = [] # Liste contenant les masques actualisés
+        # nouvelle_liste doit écraser la liste des constantes de collision pour les tuiles
+        for masque in cc.groupes["tuile"]:  # Je parcours le contenu du groupe
+            masque.rect.move_ip(x, y)  # Déplacer le rect.
+            nouvelle_liste.append(masque)  # L'ajouter à la nouvelle liste
+        cc.groupes["tuile"] = nouvelle_liste  # Ecraser l'ancienne liste
+        
     def bouger(self, x, y):
         """Déplacer la map
         Déplace:
@@ -118,21 +149,9 @@ class Map:
                             # Sauvegarder la liste (rect + mask)
                             col.Masque("tuile", rect, mask)
 
-    def bouger_masque(self, x, y):
-        """Déplace les masques de collision
-        Permets de déplacer les masques de collisions, utilisé lors du
-        Déplacement du personnage ou de la camera
-        """
-        nouvelle_liste = []
-        for masque in cc.groupes["tuile"]:  # Je parcours le contenu du groupe
-            masque.rect.move_ip(x, y)  # Déplacer le rect.
-            nouvelle_liste.append(masque)  # L'ajouter à la nouvelle liste
-        cc.groupes["tuile"] = nouvelle_liste  # Ecraser l'ancienne liste
-
-    def afficher(self):
-        """ Affiche la map
-        Affiche la map sur l'écran par rapport a un point
-        Le point est sur 0,0 par défaut.
+    def charger_arriere_plan(self):
+        """ Charge dans la variable self.arriere_plan l'image
+        Superposée des 3 premieres couches
         """
         x_rendu, y_rendu = self.point_rendu()  # Avoir le point du rendu
 
@@ -145,13 +164,12 @@ class Map:
                         tuile = ct.tuiles[self.matrices[i][y][x]]  # On extrait
                         x_tuile = x_rendu + x*32
                         y_tuile = y_rendu + y*32
-                        cp.ecran.blit(tuile, (x_tuile,   # On affiche
-                                              y_tuile))  # Tuile par tuile
-                        # Si la tuile a des collisions
+                        self.arriere_plan.blit(tuile, (x_tuile,   # On affiche
+                                                       y_tuile))  # Tuile par tuile
 
-    def afficher_4eme_couche(self):
-        """ Affiche la couche transparente de la map
-        Destinée a être utilisée après l'affichage du personnage.
+    def charger_premier_plan(self):
+        """ Charge dans la variable self.premier_plan l'image
+        De la 4 eme couche
         """
         x_rendu, y_rendu = self.point_rendu()  # Avoir le point du rendu
 
@@ -161,5 +179,5 @@ class Map:
                     tuile = ct.tuiles[self.matrices[3][y][x]]  # On extrait
                     x_tuile = x_rendu + x*32  # Position de la tuile
                     y_tuile = y_rendu + y*32  # Position de la tuile
-                    cp.ecran.blit(tuile, (x_tuile,   # On affiche
-                                          y_tuile))  # Tuile par tuile*
+                    self.premier_plan.blit(tuile, (x_tuile,   # On affiche
+                                                   y_tuile))  # Tuile par tuile
