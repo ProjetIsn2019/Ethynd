@@ -9,7 +9,7 @@ from classes import joueur
 from classes import mapping
 from classes import entitee
 import pygame as pg
-
+import time
 
 def musique():
     cp.musique = pg.mixer.Sound("son/menu.ogg")  # Récuperer la musique sous forme de variable
@@ -72,11 +72,8 @@ def initialiser_fenetre():
 
 
 def initialiser_jeu():
-    image = pg.image.load("images/chargement.png").convert()  # Charger l'image de chargement
-    cp.ecran.blit(image, (0, 0))  # Affiher l'image de chargement
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprite()  # Charger les images de sprites
-
     cp.map = mapping.Map("aventure", (-800, -1000), "aventure.ogg")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
     #cp.monstre = entitee.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
