@@ -1,4 +1,4 @@
-# -*-coding:utf-8 -*
+# -*-coding:utf-8 -*-
 """Classe du Joueur Python
 Cette classe sera dédiée au joueur, uniquement et pas les PNJs.
 Auteur: Dorian Voland
@@ -14,7 +14,7 @@ class Joueur():  # L'objet joueur
     def __init__(self):
         """Initialise le personnage
         """
-        self.sprite = None  # Sprite du personnagecv 
+        self.sprite = None  # Sprite du personnage
         self.compteur = 0  # Compteur animations
         self.frame = 0     # Numero de la frame du sprite
         self.direction = "bas"   # Direction du personnage (bas par défaut)
@@ -46,7 +46,7 @@ class Joueur():  # L'objet joueur
                     self.compteur = 0  # Recommencer les animations
                     self.frame = 0     # Réinitialiser les frames
                 self.libre = touche[4]  # Changer disponibilité du perso
- 
+
                 # Capturer les déplacements
                 x = touche[0]  # Nombre de pixels en x
                 y = touche[1]  # Nombre de pixels en x
@@ -56,9 +56,8 @@ class Joueur():  # L'objet joueur
                     # Annuler le déplacement de la hitbox de la map
                     cp.map.bouger_masque(-x, -y)
                 else:  # Sinon, si il y a pas collision
-                    cp.map.x_camera += x  # Bouger la camera en x
-                    cp.map.y_camera += y  # Bouger la camera en y
-                
+                    cp.map.bouger(x, y)
+
                 break  # Casser la boucle: Touche trouvée. On évite les autres
 
         else:  # Si la boucle n'est pas cassée: Aucune touche trouvée
@@ -96,7 +95,7 @@ class Joueur():  # L'objet joueur
                     self.libre = cj.timings[self.mouvement][2]  # Liberer perso
                     if cj.timings[self.mouvement][3]:  # Si on veux revenir
                         self.mouvement = "base"        # Sur base, on le fait
-    
+
     def actualiser_sprite(self):
         """ Met à jour le sprite
         Mise à jour du sprite en fonction de:
@@ -109,13 +108,11 @@ class Joueur():  # L'objet joueur
         sprite = cj.animation[self.direction][self.mouvement]
         self.sprite = sprite[self.frame]  # Prendre le sprite correspondant
         # Mettre à jour le rectangle du masque en créant un rectangle centré
-        self.masque.rect = self.sprite.get_rect(center=(cp.centre_x,
-                                                        cp.centre_y))
+        self.masque.rect = pg.Rect((0, 0), (23, 20))
+        self.masque.rect.center = (cp.centre_x, cp.centre_y+13)
         # Créer et assigner le masque
         self.masque.mask = pg.mask.from_surface(self.sprite)
-
         cc.groupes["joueur"] = [self.masque]
-
 
     def afficher(self):
         """Affiche le personnage"""
@@ -127,8 +124,7 @@ class Joueur():  # L'objet joueur
         y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
 
         cp.ecran.blit(self.sprite, (x_rendu, y_rendu))  # Affiche le sprite
-        
-        pg.draw.rect(cp.ecran, (255,0,0), pg.Rect( 10 , 10, 50* self.vie, 50))
+
     def afficher_interface(self):
         #vie:
         pass

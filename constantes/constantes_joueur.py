@@ -12,7 +12,7 @@ hauteur_sprite = 64
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
 ###############################################################################
 touches = {  # Les touches pour les déplacements
-    # [0, 0, "direction", "mouvement", libre]
+    # [x, y, "direction", "mouvement", libre?]
     # Nombre de pixels en x, nombre de pixels en y, direction, mouvement.
     # libre = Est-ce que le personnage est libre ? True/False
     pg.K_UP:    [0, vitesse, "haut", "marche", True],
@@ -30,7 +30,7 @@ timings = {  # Timings des animations
     # reset = revenir sur base après la fin de l'animation ? (Sinon on répète)
     "base": [None],  # Si tick = None, alors il y a aucun attribut d'animation
     "marche": [4, 3, True, False],
-    "attaque": [1, 3, True, True],
+    "attaque": [2, 3, True, True],
 }
 ###############################################################################
 animation = {  # Repertorier les sprites

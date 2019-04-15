@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Les objets de collision
 Objet "masque_collision" qui permets de créer un masque de collisions
+Auteur : Sofiane Djerbi
 """
 import pygame as pg
 from constantes import constantes_collisions as cc
 
 
-class Masque(pg.sprite.Sprite):  # La classe Masque hérite de pg.sprite.Sprite
+class Masque(pg.sprite.Sprite):  # La classe Masque hérite de pg.sprite.Sprite CAD qu'elle inclut les caracteristiques de pg.sprite.Sprite
     """Masque de collisions.
     Utilisé pour créer des collisions parfaites basées uniquement
     Sur la transparence d'une image
@@ -37,4 +38,4 @@ class Masque(pg.sprite.Sprite):  # La classe Masque hérite de pg.sprite.Sprite
         # De masque. pg.sprite.collide_mask signifie que l'on veut utiliser
         # les masques
         return pg.sprite.spritecollideany(self, cc.groupes[groupe],
-                                          pg.sprite.collide_mask)
+                                          pg.sprite.collide_rect)
