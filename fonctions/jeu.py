@@ -17,8 +17,8 @@ def musique():
 
 
 def menu():
-    image = pg.image.load("images/menu.png").convert()  # Charger l'image
-    cp.ecran.blit(image, (0, 0))  # Affiher l'image
+    image = pg.image.load("images/menu.png").convert()  # Charger l'image du menu
+    cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
     menu = True  # Booléen indiquant si l'on est dans le menu
     while menu:  # Tant que le joueur est sur le menu
         #  ################### EVENEMENTS
@@ -43,8 +43,8 @@ def menu():
 
 
 def aide():
-    image = pg.image.load("images/aide.png").convert()  # Charger l'image
-    cp.ecran.blit(image, (0, 0))  # Affiher l'image
+    image = pg.image.load("images/aide.png").convert()  # Charger l'image de l'aide
+    cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     aide = True  # Booléen indiquant si l'on est dans le menu
     while aide:  # Tant que le joueur est sur le menu
         #  ################### EVENEMENTS
@@ -72,6 +72,8 @@ def initialiser_fenetre():
 
 
 def initialiser_jeu():
+    image = pg.image.load("images/chargement.png").convert()  # Charger l'image de chargement
+    cp.ecran.blit(image, (0, 0))  # Affiher l'image de chargement
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprite()  # Charger les images de sprites
 
