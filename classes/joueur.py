@@ -21,12 +21,17 @@ class Joueur():  # L'objet joueur
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
         self.masque = col.Masque("joueur")  # Masque du joueur
-
-        self.vie = 10
-        self.blesser = False
+        self.vie = 10  # Points de vie du personnage
+        self.blesser = False  # Si le personnage est blessé ou non
+        # Créer un rectangle centré sur les jambes du personnage pour les collisions
+        self.masque.rect = pg.Rect((0, 0), (25, 20))
+        self.masque.rect.center = (cp.centre_x, cp.centre_y+13)
+        # Créer et assigner le masque
+        self.masque.mask = pg.Mask((25, 20))
+        self.masque.mask.fill()  # Remplir le masque pour créer un bloc
 
     def lire_touches(self):
-        """Lis ce que le joueur faitle
+        """Lis ce que le joueur fait
             On agit en conséquence, ex: si le joueur appuie en haut le
             sprite va en haut, etc.
         """
@@ -107,11 +112,6 @@ class Joueur():  # L'objet joueur
         # Charger la liste de sprites relative a la direction et le mouvement
         sprite = cj.animation[self.direction][self.mouvement]
         self.sprite = sprite[self.frame]  # Prendre le sprite correspondant
-        # Mettre à jour le rectangle du masque en créant un rectangle centré
-        self.masque.rect = pg.Rect((0, 0), (23, 20))
-        self.masque.rect.center = (cp.centre_x, cp.centre_y+13)
-        # Créer et assigner le masque
-        self.masque.mask = pg.mask.from_surface(self.sprite)
         cc.groupes["joueur"] = [self.masque]
 
     def afficher(self):

@@ -38,4 +38,4 @@ class Masque(pg.sprite.Sprite):  # La classe Masque hérite de pg.sprite.Sprite 
         # De masque. pg.sprite.collide_mask signifie que l'on veut utiliser
         # les masques
         return pg.sprite.spritecollideany(self, cc.groupes[groupe],
-                                          pg.sprite.collide_rect)
+                                          pg.sprite.collide_mask)
