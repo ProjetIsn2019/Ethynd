@@ -9,7 +9,7 @@ from classes import joueur
 from classes import mapping
 from classes import entitee
 import pygame as pg
-import time
+
 
 def musique():
     cp.musique = pg.mixer.Sound("son/menu.ogg")  # Récuperer la musique sous forme de variable
@@ -17,6 +17,8 @@ def musique():
 
 
 def menu():
+    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
+    son.play()  # Le jouer
     image = pg.image.load("images/menu.png").convert()  # Charger l'image du menu
     cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
     menu = True  # Booléen indiquant si l'on est dans le menu
@@ -43,6 +45,8 @@ def menu():
 
 
 def aide():
+    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
+    son.play()  # Le jouer
     image = pg.image.load("images/aide.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     aide = True  # Booléen indiquant si l'on est dans le menu
@@ -72,6 +76,8 @@ def initialiser_fenetre():
 
 
 def initialiser_jeu():
+    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
+    son.play()  # Le jouer
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprite()  # Charger les images de sprites
     cp.map = mapping.Map("aventure", (-800, -1000), "aventure.ogg")  # Chargement de la map
