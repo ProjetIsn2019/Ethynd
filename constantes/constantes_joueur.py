@@ -19,7 +19,7 @@ touches = {  # Les touches pour les déplacements
     pg.K_LEFT:  [vitesse, 0, "gauche", "marche", True],
     pg.K_DOWN:  [0, -vitesse, "bas", "marche", True],
     pg.K_RIGHT: [-vitesse, 0, "droite", "marche", True],
-    pg.K_w:     [0, 0, None, "attaque", False],
+    pg.K_x:     [0, 0, None, "attaque", False],
 }
 ###############################################################################
 timings = {  # Timings des animations

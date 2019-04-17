@@ -27,11 +27,11 @@ def menu():
             if evenement.type == pg.KEYDOWN:  # Event : Touche enclenchée
                 if evenement.key == pg.K_ESCAPE:  # Si touche = Echappe
                     return  # On quitte la fonction menu
-                elif evenement.key == pg.K_q:  # Si touche = q
+                elif evenement.unicode == "q":  # Si touche = q
                     return  # On quitte la fonction menu
-                elif evenement.key == pg.K_a:  # Si touche = a
+                elif evenement.unicode == "a":  # Si touche = a
                     return aide()  # Quitter la fonction menu et appeller la fonction aide
-                elif evenement.key == pg.K_j:  # Si touche = j
+                elif evenement.unicode == "j":  # Si touche = j
                     return initialiser_jeu()  # Quitter la fonction menu et appeller la fonction init_jeu
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
                 return  # On quitte
