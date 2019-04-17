@@ -21,7 +21,7 @@ class Entitee():
     def __init__(self, id=None):
         """Initialise la classes entitee
         """
-        self.pos_encienne_cam = [cp.map.x_camera, cp.map.y_camera]
+        self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
         self.position = [cp.map.x_camera, cp.map.y_camera]
         self.id = id
         self.taille = [1, 1]

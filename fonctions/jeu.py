@@ -21,24 +21,20 @@ def menu():
     son.play()  # Le jouer
     image = pg.image.load("images/menu.png").convert()  # Charger l'image du menu
     cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
-    menu = True  # Booléen indiquant si l'on est dans le menu
-    while menu:  # Tant que le joueur est sur le menu
+    while True:  # Boucle infinie
         #  ################### EVENEMENTS
         for evenement in pg.event.get():  # Je parcours les evenements
             if evenement.type == pg.KEYDOWN:  # Event : Touche enclenchée
                 if evenement.key == pg.K_ESCAPE:  # Si touche = Echappe
-                    menu = False  # On quitte
+                    return  # On quitte la fonction menu
                 elif evenement.key == pg.K_q:  # Si touche = q
-                    menu = False  # On quitte
+                    return  # On quitte la fonction menu
                 elif evenement.key == pg.K_a:  # Si touche = a
-                    menu = False  # On quitte
-                    aide()
+                    return aide()  # Quitter la fonction menu et appeller la fonction aide
                 elif evenement.key == pg.K_j:  # Si touche = j
-                    menu = False
-                    initialiser_jeu()
-                    boucle_de_jeu()
+                    return initialiser_jeu()  # Quitter la fonction menu et appeller la fonction init_jeu
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
-                menu = False  # On quitte
+                return  # On quitte
         #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
@@ -49,17 +45,14 @@ def aide():
     son.play()  # Le jouer
     image = pg.image.load("images/aide.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
-    aide = True  # Booléen indiquant si l'on est dans le menu
-    while aide:  # Tant que le joueur est sur le menu
-        #  ################### EVENEMENTS
+    while True:  # Boucle infinie
         for evenement in pg.event.get():  # Je parcours les evenements
             if evenement.type == pg.KEYDOWN:  # Event : Touche enclenchée
                 if evenement.key == pg.K_ESCAPE:  # Si touche = Echappe
-                    aide = False
-                    menu()
+                    return menu()  # Quitter la fonction aide pour aller dans la fonction menu
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
-                aide = False  # On quitte
-        #  ################### EVENEMENTS
+                return  # Quitter aide
+
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
 
@@ -83,10 +76,11 @@ def initialiser_jeu():
     cp.map = mapping.Map("aventure", (-800, -1000), "aventure.ogg")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
     #cp.monstre = entitee.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
+    boucle_de_jeu()  # Lancer la partie
 
 
 def boucle_de_jeu():
-    while cp.jouer:  # Tant que le joueur joue
+    while True:  # Tant que le joueur joue
         """ Boucle de jeu
         Boucle de jeu: Gestion events, executée en boucle.
         1 éxécution = 1 tick.
@@ -103,9 +97,9 @@ def boucle_de_jeu():
         for evenement in pg.event.get():  # Je parcours les evenements
             if evenement.type == pg.KEYDOWN:  # Event : Touche enclenchée
                 if evenement.key == pg.K_ESCAPE:  # Si touche = Echappe
-                    cp.jouer = False  # On quitte
+                    return  # On quitte
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
-                cp.jouer = False  # On quitte
+                    return  # On quitte
 #  ################### EVENEMENTS
 
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
