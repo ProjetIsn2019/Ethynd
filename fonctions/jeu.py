@@ -85,7 +85,6 @@ def boucle_de_jeu():
         Boucle de jeu: Gestion events, executée en boucle.
         1 éxécution = 1 tick.
         """
-        cp.ecran.fill(cp.map.couleur_fond)  # Mettre la couleur de fond correspondant à la map
         cp.map.actualiser()
         cp.perso.lire_touches()  # Faire les déplacements/Animations du personnage
         #cp.monstre.deplacement()  # Effectuer le déplacement de tout les monstres
