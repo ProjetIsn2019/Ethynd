@@ -7,7 +7,9 @@ Auteur: Sofiane Djerbi
 import pygame as pg
 from constantes import constantes_joueur as cj
 from constantes import constantes_tuiles as ct
-
+from constantes import constantes_partie as cp
+from constantes import constantes_collisions as cc
+from classes.monstre import Monstre
 
 def charger_tileset():
     """Charger un tileset
@@ -40,3 +42,46 @@ def charger_sprite():
                     img = pg.image.load(sprite).convert_alpha()  # Charger
                     cj.animation[direction][mouvement][numero] = img  # Sauver
                 numero += 1  # Numéro du sprite actuel + 1 (Le compteur)
+
+
+def charger_monstre(id_niveau = "niveau_1"):
+    """ Céer des monstres d'une liste 
+    """
+    liste_monstre = []
+    masqueMonstre = []
+
+    for type_monstre in cp.niveau[id_niveau]:
+        liste_monstre.append(type_monstre)
+
+    for type_monstre in liste_monstre:
+        for liste_parametre in cp.niveau[id_niveau][type_monstre]:
+            
+            monstre = Monstre(type_monstre, liste_parametre)
+            cp.entites_liste.append(monstre)
+
+    for entite in cp.entites_liste:
+        entite.deplacement()
+        entite.afficher()
+        masqueMonstre.append(entite.masque)
+    masqueMonstre = masqueMonstre
+    
+def gerer_monstres():
+    """
+    * Gere les montres:
+    *  - ajoute leurs masques
+    *  - les deplaces
+    *  - les affiches
+    *
+    """
+    masqueMonstre = []
+
+    for entite in cp.entites_liste:
+        if entite.vie > 0:
+            if entite.masque.collision("objet"):
+                entite.vie -= 1
+                entite.jouer_son("hit")
+            entite.deplacement()
+            entite.afficher()
+            masqueMonstre.append(entite.masque)
+    cc.groupes["Monstre"] = masqueMonstre
+
