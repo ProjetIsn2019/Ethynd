@@ -20,7 +20,7 @@ class Map:
     ++ Support transparence.
     """
 
-    def __init__(self, nom, camera=(0, 0), musique=None):
+    def __init__(self, nom, camera=(0, 0), musique=None, couleur_fond=(40, 38, 51)):
         """Initialise la map
         Avec un nom, la position de la camera, la couleur de fond
         Ajoute une hitbox pour les collisions et convertis le fichier de la map
@@ -34,6 +34,7 @@ class Map:
         self.nom = nom     # Définition du nom de la map
         self.x_camera = x  # Camera X (position de la camera en fonction de l'axe des abcysses)
         self.y_camera = y  # Camera Y (position de la camera en fonction de l'ordonnée)
+        self.couleur_fond = couleur_fond  # Couleur de fond
         self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu
@@ -54,6 +55,7 @@ class Map:
         if musique is not None:  # Si une musique est donnée dans les paramètres
             if cp.musique is not None:  # Si une musique est jouée
                 cp.musique.stop()   # Alors arrêter cette musique
+            pg.mixer.Channel(1)
             cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme de variable
             cp.musique.play(loops=-1)   # Jouer la musique (loops=-1 permet de la jouer en boucle indéfiniment)
 

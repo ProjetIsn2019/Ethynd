@@ -35,8 +35,15 @@ class Entitee():
         self.masque = col.Masque("entitee")  # Masque de l'entitee
         self.type_deplacement = "base"
 
+        self.channel_entite = pg.mixer.Channel(3)
+
         print("Chargement d'une entitée")
         self.charger_sprite()
+
+    def jouer_son(self, le_son):
+        if not self.channel_entite.get_busy():
+            self.son = pg.mixer.Sound(ce.son[self.type][self.id][le_son])
+            self.channel_entite.play(self.son)
 
     def charger_sprite(self):
         """Charge les sprites
@@ -147,9 +154,7 @@ class Entitee():
         # On actualise le masque
         self.bouger_masque((0, 0))
 
-        cc.groupes["Monstre"] = [self.masque]
 
-        pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
     def afficher(self):
         """ Procedure qui gere l'affichage de mon personnage
         Gère l'affichage des animations
@@ -162,26 +167,7 @@ class Entitee():
         # Affiche le sprite
         cp.ecran.blit(self.sprite, (x, y))
 
+    def info(self):
+        pass
 
-class Monstre(Entitee):
-    """ Classe Monstre qui herite de Entitee
-            redefini methode déplacement() ==> type_deplacement: - aleatoire
-                                                                 - base
-                                                                 - zone (en cours)
-    """
-    def __init__(self, id, position, taille ,type_deplacement, vie, attaque):
-        monstre = "monstre_"+ str(id)
-        super(Monstre, self).__init__(monstre)
-        self.taille = taille
-        self.position = position
-        self.masque = col.Masque("Monstre")
-        self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
-        self.type_deplacement = type_deplacement
 
-        self.vie = vie
-        self.attaque = attaque
-
-    def chargement(self):
-        """ Procedure qui affiche le chargement d'un monstre
-        """
-        print("Chargement du monstre : " + self.id + "...")

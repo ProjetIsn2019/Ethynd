@@ -10,6 +10,11 @@ vitesse = 3
 largeur_sprite = 64
 hauteur_sprite = 64
 sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
+
+chemin_son = "son/joueur/"
+phrase = "phrase.ogg"
+attaque = "attaque.ogg"
+marche = "marche.ogg"
 ###############################################################################
 touches = {  # Les touches pour les déplacements
     # [x, y, "direction", "mouvement", libre?]
@@ -105,4 +110,9 @@ animation = {  # Repertorier les sprites
             sprite + "1_59.png"   # Attaque 4
         ],
     }
+}
+son = {
+    "phrase" : chemin_son + phrase,
+    "marche" : chemin_son + marche,
+    "attaque": chemin_son + attaque,
 }

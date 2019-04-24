@@ -7,6 +7,7 @@ from constantes import constantes_joueur as cj
 from constantes import constantes_partie as cp
 from constantes import constantes_collisions as cc
 from classes import collision as col
+import random as rd
 import pygame as pg
 
 
@@ -21,6 +22,7 @@ class Joueur():  # L'objet joueur
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
         self.masque = col.Masque("joueur")  # Masque du joueur
+        self.masque_objet = col.Masque("objet")  # Masque du joueur
         self.vie = 10  # Points de vie du personnage
         self.blesser = False  # Si le personnage est blessé ou non
         # Créer un rectangle centré sur les jambes du personnage pour les collisions
@@ -29,6 +31,19 @@ class Joueur():  # L'objet joueur
         # Créer et assigner le masque
         self.masque.mask = pg.Mask((25, 20))
         self.masque.mask.fill()  # Remplir le masque pour créer un bloc
+
+        self.channel_joueur = pg.mixer.Channel(2)
+        self.son = pg.mixer.Sound(cj.son["phrase"])
+        self.son.play()
+        self.bool_son = True
+        # Créer un rectangle centré sur les jambes du personnage pour les collisions
+        self.masque_objet.rect = pg.Rect((cp.centre_x-20, cp.centre_y+10), (32, 22))
+        self.masque_objet.rect.center = (cp.centre_x-4, cp.centre_y-11)
+        # Créer et assigner le masque
+        self.masque_objet.mask = pg.Mask((32, 22))
+        self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
+
+
 
     def lire_touches(self):
         """Lis ce que le joueur fait
@@ -69,14 +84,79 @@ class Joueur():  # L'objet joueur
             self.mouvement = "base"  # On dit qu'il n'y a aucun mouvement
             self.libre = True  # Perso libre car pas de mouvement
 
-    def enlever_vie(self, ennemi):
+    def enlever_vie(self):
         """ Enleve de la vie au joueur si il prend des dégats
         """
         if self.masque.collision("Monstre") and not self.blesser:
-            self.blesser = True
-            self.vie -= ennemi.attaque
+            if not self.masque_objet.collision("Monstre"):
+                self.blesser = True
+                self.vie -= 1
+
         elif not self.masque.collision("Monstre") and self.blesser:
             self.blesser = False
+
+    def attaquer(self):
+        if self.mouvement == "attaque":
+            if self.direction == "bas":
+                x = cp.centre_x + 10
+                y = cp.centre_y + 30
+                longueur =  32
+                hauteur = 22
+            elif self.direction == "gauche":
+                x = cp.centre_x - 10
+                y = cp.centre_y + 20
+                longueur =  25
+                hauteur = 32
+            elif self.direction == "droite":
+                x = cp.centre_x + 28
+                y = cp.centre_y + 20
+                longueur =  22
+                hauteur = 32
+            elif self.direction == "haut":
+                x = cp.centre_x + 20
+                y = cp.centre_y 
+                longueur =  32
+                hauteur = 22
+
+            hitbox = pg.Rect((x, y), (longueur, hauteur))
+
+            self.masque_objet.rect = hitbox
+            self.masque_objet.rect.center = (x- longueur/2, y - hauteur/2)
+            # Créer et assigner le masque
+            self.masque_objet.mask = pg.Mask((longueur, hauteur))
+            self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
+            pg.draw.rect(cp.ecran, (255, 255, 255), hitbox)
+            
+            if self.masque_objet.collision("Monstre"):
+                pg.draw.rect(cp.ecran, (255, 0, 0), hitbox)
+            cc.groupes["objet"] = [self.masque_objet]
+        else:
+            cc.groupes["objet"] = []
+
+    def actualiser_son(self):
+
+        if self.mouvement == "attaque":
+            bool_son = False
+            if self.compteur == 0 and self.frame == 1:
+                self.son = pg.mixer.Sound(cj.son["attaque"])
+                self.channel_joueur.play(self.son)
+
+        elif not self.channel_joueur.get_busy():
+            bool_son = False
+            nb_rd = rd.randint(0,100)
+            if self.mouvement == "marche":
+                self.son = pg.mixer.Sound(cj.son["marche"])
+                self.channel_joueur.play(self.son)
+
+            
+            elif nb_rd == 50:
+                self.son = pg.mixer.Sound(cj.son["phrase"])
+                self.channel_joueur.play(self.son)
+
+        if self.mouvement == "base":
+                self.channel_joueur.stop()
+            
+        
 
     def actualiser_frame(self):
         # MISE A JOUR DES FRAMES EN FONCTION DES TICKS
@@ -114,17 +194,26 @@ class Joueur():  # L'objet joueur
         self.sprite = sprite[self.frame]  # Prendre le sprite correspondant
         cc.groupes["joueur"] = [self.masque]
 
-    def afficher(self):
-        """Affiche le personnage"""
+    def interface(self):
+        """ Affiche les information comme la vie
+        """
+        coeur = pg.image.load("images/sprites_item/coeur.png").convert_alpha()
+        for i in range(self.vie):
+            cp.ecran.blit(coeur, (35*i, 30))
 
+    def actualiser(self):
+        """Affiche le personnage"""
+        self.enlever_vie()
         self.actualiser_frame()  # Actualiser les frames
         self.actualiser_sprite()  # Actualiser le sprite
+        self.attaquer()
+        self.actualiser_son()
+
+
         # Je calcule la position de rendu du sprite afin qu'il soit bien centré
         x_rendu = cp.centre_x - cj.hauteur_sprite/2  # Le x de rendu
         y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
 
         cp.ecran.blit(self.sprite, (x_rendu, y_rendu))  # Affiche le sprite
 
-    def afficher_interface(self):
-        #vie:
-        pass
+

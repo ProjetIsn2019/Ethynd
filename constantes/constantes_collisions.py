@@ -9,6 +9,7 @@ groupes = {
     "entitee": pg.sprite.Group(),   # Liste des masques pour les entiees
     "joueur": pg.sprite.Group(),    # Liste des masques pour les joueurs
     "Monstre": pg.sprite.Group(),   # Liste des masques pour les ennemis
+    "objet": pg.sprite.Group(),     # Liste des masques pour les objets
     "pnj": pg.sprite.Group(),       # Liste des masques pour les personnages non joueurs
     "tout": pg.sprite.Group()       # Liste des masques pour tout
 }
