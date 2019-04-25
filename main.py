@@ -12,4 +12,4 @@ pg.init()  # Mettre en route pygame
 jeu.initialiser_fenetre()  # Créer et initialiser la fenêtre
 jeu.musique()
 jeu.menu()  # Affichage du menu
-pjg.quit()  # Quitter pg.
+pg.quit()  # Quitter pg.
