@@ -4,8 +4,8 @@ entitees_liste = [
         "dragon_rouge"
     ]
 
-sprite_dragon = "images/sprites_ennemie/dragon_rouge/sprite_dragon_rouge"
-sprite_chauve_souris = "images/sprites_ennemie/chauve_souris/sprite_chauve_souris"
+sprite_dragon = "images/sprites_ennemi/dragon_rouge/sprite_dragon_rouge"
+sprite_chauve_souris = "images/sprites_ennemi/chauve_souris/sprite_chauve_souris"
 sprite_joueur = "images/sprites/sprite_"
 
 son_chauve_souris = "son/monstre/dragon_rouge_"
