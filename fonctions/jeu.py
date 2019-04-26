@@ -60,6 +60,10 @@ def aide():
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
 
+def chargement():
+    image = pg.image.load("images/chargement.png").convert()  # Charger l'image de l'aide
+    cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
+    pg.display.update()
 
 def initialiser_fenetre():
     pg.display.set_caption("Ethynd")  # Définition du titre de la fenêtre
@@ -73,6 +77,7 @@ def initialiser_fenetre():
 
 
 def initialiser_jeu():
+    chargement()  # J'affiche l'écran de chargement
     son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
     son.play()  # Le jouer
     charger.charger_tileset()  # Charger les images de tuiles
@@ -92,7 +97,7 @@ def boucle_fin():
         image = pg.image.load("images/menu/menu_mort.jpg").convert()  # Charger l'image du menu
     else:
         image = pg.image.load("images/menu/menu_fin.png").convert()  # Charger l'image du menu
-        
+
     cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
     while True or i < 180:  # Boucle infinie
         i += 1
@@ -108,16 +113,11 @@ def boucle_fin():
 
 
 def boucle_de_jeu():
-    jeux = True
-    while jeux:  # Tant que le joueur joue
+    while True:  # Tant que le joueur joue
         """ Boucle de jeu
         Boucle de jeu: Gestion events, executée en boucle.
         1 éxécution = 1 tick.
         """
-        if cp.perso.vie < 1:
-            jeux = False
-        if cc.groupes["Monstre"] == []:
-            jeux = False
         cp.ecran.fill(cp.map.couleur_fond)  # Mettre la couleur de fond correspondant à la map
         cp.map.actualiser()
         cp.perso.lire_touches()  # Faire les déplacements/Animations du personnage
@@ -138,7 +138,5 @@ def boucle_de_jeu():
 #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
-    
-    boucle_fin()
 
-        
+    boucle_fin()
