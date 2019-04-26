@@ -7,6 +7,6 @@ from fonctions import jeu
 
 pg.init()  # Mettre en route pygame
 jeu.initialiser_fenetre()  # Créer et initialiser la fenêtre
-jeu.musique()  # Initialiser la musique
+jeu.initialiser_musique()  # Initialiser la musique
 jeu.menu()  # Affichage du menu
 pg.quit()  # Quitter pg.

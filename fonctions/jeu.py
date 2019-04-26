@@ -11,8 +11,30 @@ from classes import mapping
 from classes import entite
 import pygame as pg
 
+def initialiser_fenetre():
+    pg.display.set_caption("Ethynd")  # Définition du titre de la fenêtre
+    pg.display.set_icon(pg.image.load("images/icone.png"))  # Chargement de l'icone
 
-def musique():
+    pg.mouse.set_visible(False)  # On cache la souris
+    cp.ecran = pg.display.set_mode((cp.ecran_x, cp.ecran_y),  # On crée une fenêtre de la taille définie dans les constantes de partie
+                                   pg.NOFRAME)
+    cp.jouer = True  # On défini un booléen qui nous indique le statut de la partie
+    cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
+
+
+def initialiser_jeu():
+    chargement()  # J'affiche l'écran de chargement
+    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
+    son.play()  # Le jouer
+    charger.charger_tileset()  # Charger les images de tuiles
+    charger.charger_sprites()  # Charger les images de sprites
+    cp.map = mapping.Map("aventure", (0, 0), "aventure.ogg")  # Chargement de la map
+    cp.perso = joueur.Joueur()  # Chargement du joueur
+    charger.charger_monstre()
+    #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
+    boucle_de_jeu()  # Lancer la partie
+
+def initialiser_musique():
     pg.mixer.pre_init(44100, -16, 2, 1024)  # Réglages du mixeur pygame (fréquence (Hz), nombre de bits, channel, taille du buffer)
     pg.mixer.init()  # Initialisation du mixeur audio pygame
     pg.mixer.set_num_channels(8)
@@ -67,29 +89,6 @@ def chargement():
     image = pg.image.load("images/menu/chargement.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     pg.display.update()
-
-def initialiser_fenetre():
-    pg.display.set_caption("Ethynd")  # Définition du titre de la fenêtre
-    pg.display.set_icon(pg.image.load("images/icone.png"))  # Chargement de l'icone
-
-    pg.mouse.set_visible(False)  # On cache la souris
-    cp.ecran = pg.display.set_mode((cp.ecran_x, cp.ecran_y),  # On crée une fenêtre de la taille définie dans les constantes de partie
-                                   pg.NOFRAME)
-    cp.jouer = True  # On défini un booléen qui nous indique le statut de la partie
-    cp.horloge = pg.time.Clock()  # L'horloge pour contrôler les tick par sec
-
-
-def initialiser_jeu():
-    chargement()  # J'affiche l'écran de chargement
-    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
-    son.play()  # Le jouer
-    charger.charger_tileset()  # Charger les images de tuiles
-    charger.charger_sprite()  # Charger les images de sprites
-    cp.map = mapping.Map("aventure", (-800, -1000), "aventure.ogg")  # Chargement de la map
-    cp.perso = joueur.Joueur()  # Chargement du joueur
-    charger.charger_monstre()
-    #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
-    boucle_de_jeu()  # Lancer la partie
 
 def ecran_fin():
     cp.musique.stop()
