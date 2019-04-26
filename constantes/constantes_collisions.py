@@ -6,7 +6,7 @@ import pygame as pg
 
 groupes = {
     "tuile": pg.sprite.Group(),     # Liste des masques pour les tuiles
-    "entitee": pg.sprite.Group(),   # Liste des masques pour les entiees
+    "entite": pg.sprite.Group(),   # Liste des masques pour les entiees
     "joueur": pg.sprite.Group(),    # Liste des masques pour les joueurs
     "Monstre": pg.sprite.Group(),   # Liste des masques pour les ennemis
     "objet": pg.sprite.Group(),     # Liste des masques pour les objets

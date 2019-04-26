@@ -20,7 +20,7 @@ class Map:
     ++ Support transparence.
     """
 
-    def __init__(self, nom, camera=(0, 0), musique=None, couleur_fond=(40, 38, 51)):
+    def __init__(self, nom, camera=(0, 0), musique=None):
         """Initialise la map
         Avec un nom, la position de la camera, la couleur de fond
         Ajoute une hitbox pour les collisions et convertis le fichier de la map
@@ -34,7 +34,6 @@ class Map:
         self.nom = nom     # Définition du nom de la map
         self.x_camera = x  # Camera X (position de la camera en fonction de l'axe des abcysses)
         self.y_camera = y  # Camera Y (position de la camera en fonction de l'ordonnée)
-        self.couleur_fond = couleur_fond  # Couleur de fond
         self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu

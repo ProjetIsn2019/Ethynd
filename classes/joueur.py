@@ -33,9 +33,7 @@ class Joueur():  # L'objet joueur
         self.masque.mask.fill()  # Remplir le masque pour créer un bloc
 
         self.channel_joueur = pg.mixer.Channel(2)
-        self.son = pg.mixer.Sound(cj.son["phrase"])
-        self.son.play()
-        self.bool_son = True
+
         # Créer un rectangle centré sur les jambes du personnage pour les collisions
         self.masque_objet.rect = pg.Rect((cp.centre_x-20, cp.centre_y+10), (32, 22))
         self.masque_objet.rect.center = (cp.centre_x-4, cp.centre_y-11)
@@ -114,7 +112,7 @@ class Joueur():  # L'objet joueur
                 hauteur = 32
             elif self.direction == "haut":
                 x = cp.centre_x + 20
-                y = cp.centre_y 
+                y = cp.centre_y
                 longueur =  32
                 hauteur = 22
 
@@ -126,7 +124,7 @@ class Joueur():  # L'objet joueur
             self.masque_objet.mask = pg.Mask((longueur, hauteur))
             self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
             pg.draw.rect(cp.ecran, (255, 255, 255), hitbox)
-            
+
             if self.masque_objet.collision("Monstre"):
                 pg.draw.rect(cp.ecran, (255, 0, 0), hitbox)
             cc.groupes["objet"] = [self.masque_objet]
@@ -136,27 +134,19 @@ class Joueur():  # L'objet joueur
     def actualiser_son(self):
 
         if self.mouvement == "attaque":
-            bool_son = False
             if self.compteur == 0 and self.frame == 1:
                 self.son = pg.mixer.Sound(cj.son["attaque"])
                 self.channel_joueur.play(self.son)
 
         elif not self.channel_joueur.get_busy():
-            bool_son = False
-            nb_rd = rd.randint(0,100)
             if self.mouvement == "marche":
                 self.son = pg.mixer.Sound(cj.son["marche"])
                 self.channel_joueur.play(self.son)
 
-            
-            elif nb_rd == 50:
-                self.son = pg.mixer.Sound(cj.son["phrase"])
-                self.channel_joueur.play(self.son)
-
         if self.mouvement == "base":
                 self.channel_joueur.stop()
-            
-        
+
+
 
     def actualiser_frame(self):
         # MISE A JOUR DES FRAMES EN FONCTION DES TICKS
@@ -197,7 +187,7 @@ class Joueur():  # L'objet joueur
     def interface(self):
         """ Affiche les information comme la vie
         """
-        coeur = pg.image.load("images/sprites_item/coeur.png").convert_alpha()
+        coeur = pg.image.load("images/objets/coeur.png").convert_alpha()
         for i in range(self.vie):
             cp.ecran.blit(coeur, (35*i, 30))
 
@@ -215,5 +205,3 @@ class Joueur():  # L'objet joueur
         y_rendu = cp.centre_y - cj.largeur_sprite/2  # Le y de rendu
 
         cp.ecran.blit(self.sprite, (x_rendu, y_rendu))  # Affiche le sprite
-
-

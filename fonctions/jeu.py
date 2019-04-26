@@ -8,13 +8,16 @@ from constantes import constantes_collisions as cc
 from fonctions import charger
 from classes import joueur
 from classes import mapping
-from classes import entitee
+from classes import entite
 import pygame as pg
 
 
 def musique():
+    pg.mixer.pre_init(44100, -16, 2, 1024)  # Réglages du mixeur pygame (fréquence (Hz), nombre de bits, channel, taille du buffer)
+    pg.mixer.init()  # Initialisation du mixeur audio pygame
+    pg.mixer.set_num_channels(8)
     pg.mixer.Channel(1)
-    cp.musique = pg.mixer.Sound("son/menu2.ogg")  # Récuperer la musique sous forme de variable
+    cp.musique = pg.mixer.Sound("son/menu.ogg")  # Récuperer la musique sous forme de variable
     cp.musique.play(loops=-1)   # Jouer la musique (loops=-1 permet de la jouer en boucle indéfiniment)
 
 
@@ -61,7 +64,7 @@ def aide():
         pg.display.update()  # On change de tick. On actualise l'écran.
 
 def chargement():
-    image = pg.image.load("images/chargement.png").convert()  # Charger l'image de l'aide
+    image = pg.image.load("images/menu/chargement.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     pg.display.update()
 
@@ -85,20 +88,19 @@ def initialiser_jeu():
     cp.map = mapping.Map("aventure", (-800, -1000), "aventure.ogg")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
     charger.charger_monstre()
-    #cp.monstre = entitee.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
+    #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
     boucle_de_jeu()  # Lancer la partie
 
-def boucle_fin():
+def ecran_fin():
     cp.musique.stop()
-    musique()
 
-    i = 0
     if cp.perso.vie < 1:
-        image = pg.image.load("images/menu/menu_mort.jpg").convert()  # Charger l'image du menu
+        image = pg.image.load("images/menu/mort.png").convert()  # Charger l'image du menu
     else:
-        image = pg.image.load("images/menu/menu_fin.png").convert()  # Charger l'image du menu
+        image = pg.image.load("images/menu/fin.png").convert()  # Charger l'image du menu de fin
 
-    cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
+    cp.ecran.blit(image, (0, 0))  # Affiher l'image en question
+
     while True or i < 180:  # Boucle infinie
         i += 1
         #  ################### EVENEMENTS
@@ -118,7 +120,7 @@ def boucle_de_jeu():
         Boucle de jeu: Gestion events, executée en boucle.
         1 éxécution = 1 tick.
         """
-        cp.ecran.fill(cp.map.couleur_fond)  # Mettre la couleur de fond correspondant à la map
+
         cp.map.actualiser()
         cp.perso.lire_touches()  # Faire les déplacements/Animations du personnage
         #cp.monstre.deplacement()  # Effectuer le déplacement de tout les monstres
@@ -138,5 +140,3 @@ def boucle_de_jeu():
 #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
-
-    boucle_fin()

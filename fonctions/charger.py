@@ -2,7 +2,7 @@
 """Fontions de Chargement
 Fonctions dédiées à charger notre base de données de chemin d'images
 Sous forme d'images Pygame
-Auteur: Sofiane Djerbi
+Auteur: Sofiane Djerbi + Dorian Voland
 """
 import pygame as pg
 from constantes import constantes_joueur as cj
@@ -29,15 +29,14 @@ def charger_tileset():
             id += 1  # J'incrémente les IDs
 
 
-def charger_sprite():
+def charger_sprites():
     """Charge les sprites
-    Permets de charger les sprites du dictionnaire "info"
+    Permets de charger les sprites des différents dictionnaires
     """
-    # Parcourir les animations PUIS les collisions
     for direction in cj.animation:  # Parcours des directions
         for mouvement in cj.animation[direction]:  # Parcours des mouvements
             numero = 0  # Compteur utilisé dans le parcours des sprites
-            for sprite in cj.animation[direction][mouvement]:  # Parcourir imgs
+            for sprite in cj.animation[direction][mouvement]:  # Parcourir images
                 if isinstance(sprite, str):  # Si le sprite est un txt
                     img = pg.image.load(sprite).convert_alpha()  # Charger
                     cj.animation[direction][mouvement][numero] = img  # Sauver

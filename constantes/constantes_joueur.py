@@ -9,12 +9,8 @@ import pygame as pg
 vitesse = 3
 largeur_sprite = 64
 hauteur_sprite = 64
-sprite = "images/sprites/sprite_"  # Le nom d'un sprite sans son numéro
+sprite = "images/sprites/personnage_"  # Le nom de base d'un sprite du joueur sans le numéro
 
-chemin_son = "son/joueur/"
-phrase = "phrase.ogg"
-attaque = "attaque.ogg"
-marche = "marche.ogg"
 ###############################################################################
 touches = {  # Les touches pour les déplacements
     # [x, y, "direction", "mouvement", libre?]
@@ -42,77 +38,76 @@ animation = {  # Repertorier les sprites
     # Animation marche : 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 [...]
     "bas": {
         "base": [
-            sprite + "1_00.png"   # Base
+            sprite + "00.png"   # Base
         ],
         "marche": [
-            sprite + "1_01.png",  # Marche 1
-            sprite + "1_02.png",  # Marche 2
-            sprite + "1_03.png",  # Marche 3
-            sprite + "1_00.png"   # Marche 4
+            sprite + "01.png",  # Marche 1
+            sprite + "02.png",  # Marche 2
+            sprite + "03.png",  # Marche 3
+            sprite + "00.png"   # Marche 4
         ],
         "attaque": [
-            sprite + "1_44.png",  # Attaque 1
-            sprite + "1_45.png",  # Attaque 2
-            sprite + "1_46.png",  # Attaque 3
-            sprite + "1_47.png"   # Attaque 4
+            sprite + "44.png",  # Attaque 1
+            sprite + "45.png",  # Attaque 2
+            sprite + "46.png",  # Attaque 3
+            sprite + "47.png"   # Attaque 4
         ],
     },
     "droite": {
         "base": [
-            sprite + "1_11.png"   # Base
+            sprite + "11.png"   # Base
         ],
         "marche": [
-            sprite + "1_12.png",  # Marche 1
-            sprite + "1_13.png",  # Marche 2
-            sprite + "1_14.png",  # Marche 3
-            sprite + "1_11.png"   # Marche 4
+            sprite + "12.png",  # Marche 1
+            sprite + "13.png",  # Marche 2
+            sprite + "14.png",  # Marche 3
+            sprite + "11.png"   # Marche 4
         ],
         "attaque": [
-            sprite + "1_52.png",  # Attaque 1
-            sprite + "1_53.png",  # Attaque 2
-            sprite + "1_54.png",  # Attaque 3
-            sprite + "1_55.png"   # Attaque 4
+            sprite + "52.png",  # Attaque 1
+            sprite + "53.png",  # Attaque 2
+            sprite + "54.png",  # Attaque 3
+            sprite + "55.png"   # Attaque 4
         ],
     },
 
     "haut": {
         "base": [
-            sprite + "1_22.png"   # Base
+            sprite + "22.png"   # Base
         ],
         "marche": [
-            sprite + "1_23.png",  # Marche 1
-            sprite + "1_24.png",  # Marche 2
-            sprite + "1_25.png",  # Marche 3
-            sprite + "1_22.png"   # Marche 4
+            sprite + "23.png",  # Marche 1
+            sprite + "24.png",  # Marche 2
+            sprite + "25.png",  # Marche 3
+            sprite + "22.png"   # Marche 4
         ],
         "attaque": [
-            sprite + "1_48.png",  # Attaque 1
-            sprite + "1_49.png",  # Attaque 2
-            sprite + "1_50.png",  # Attaque 3
-            sprite + "1_51.png"   # Attaque 4
+            sprite + "48.png",  # Attaque 1
+            sprite + "49.png",  # Attaque 2
+            sprite + "50.png",  # Attaque 3
+            sprite + "51.png"   # Attaque 4
         ],
     },
 
     "gauche": {
         "base": [
-            sprite + "1_33.png"   # Base
+            sprite + "33.png"   # Base
         ],
         "marche": [
-            sprite + "1_34.png",  # Marche 1
-            sprite + "1_35.png",  # Marche 2
-            sprite + "1_36.png",  # Marche 3
-            sprite + "1_33.png"   # Marche 4
+            sprite + "34.png",  # Marche 1
+            sprite + "35.png",  # Marche 2
+            sprite + "36.png",  # Marche 3
+            sprite + "33.png"   # Marche 4
         ],
         "attaque": [
-            sprite + "1_56.png",  # Attaque 1
-            sprite + "1_57.png",  # Attaque 2
-            sprite + "1_58.png",  # Attaque 3
-            sprite + "1_59.png"   # Attaque 4
+            sprite + "56.png",  # Attaque 1
+            sprite + "57.png",  # Attaque 2
+            sprite + "58.png",  # Attaque 3
+            sprite + "59.png"   # Attaque 4
         ],
     }
 }
 son = {
-    "phrase" : chemin_son + phrase,
-    "marche" : chemin_son + marche,
-    "attaque": chemin_son + attaque,
+    "marche" : "son/joueur/marche.ogg",
+    "attaque": "son/joueur/attaque.ogg",
 }
