@@ -12,7 +12,7 @@ from constantes import constantes_entite as ce
 from constantes import constantes_collisions as cc
 from classes import collision as col
 
-class Entitee():
+class Entite():
     """Classe mere des entités du jeu
     Une entité est un personnage animé par le jeu directement
     C'est souvent décoratif ou pour mettre en place des combats
