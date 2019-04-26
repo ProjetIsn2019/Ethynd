@@ -123,10 +123,7 @@ class Joueur():  # L'objet joueur
             # Créer et assigner le masque
             self.masque_objet.mask = pg.Mask((longueur, hauteur))
             self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
-            pg.draw.rect(cp.ecran, (255, 255, 255), hitbox)
 
-            if self.masque_objet.collision("Monstre"):
-                pg.draw.rect(cp.ecran, (255, 0, 0), hitbox)
             cc.groupes["objet"] = [self.masque_objet]
         else:
             cc.groupes["objet"] = []
