@@ -103,15 +103,15 @@ class Map:
             self.compteur += 1  # Incrémenter le compteur
             return  # Quitter la fonction
         for i in range(4):  # Parcourir les couches de la map
-            for x in range(self.x):  # Parcourir les tuiles en abscisse
-                for y in range(self.y):  # Parcourir les tuiles en ordonnée
+            for y in range(self.y):  # Parcourir les tuiles en abscisse
+                for x in range(self.x):  # Parcourir les tuiles en ordonnée
                     if self.matrices[i][y][x] in ct.animations:  # Si la tuile a une animation correspondante
                         self.matrices[i][y][x] = ct.animations[self.matrices[i][y][x]]  # Lui assigner l'animation correspondante
                         tuile = ct.tuiles[self.matrices[i][y][x]]  # On extrait la tuile
                         if i == 3:  # Si on parcours le premier plan
-                            self.arriere_plan.blit(tuile, (x*32, y*32))  # On colle les images sur l'arrière plan tuile par tuile
+                            self.premier_plan.blit(tuile, (x*32, y*32))  # On colle les images sur l'arrière plan tuile par tuile
                         else:  # Sinon (implicitement, on parcours l'arrière plan)
-                            self.premier_plan.blit(tuile, (x*32, y*32))  # On colle les images sur le premier plan tuile par tuile
+                            self.arriere_plan.blit(tuile, (x*32, y*32))  # On colle les images sur le premier plan tuile par tuile
         self.compteur = 0
 
     def charger_matrice(self):
@@ -141,8 +141,8 @@ class Map:
             cc.groupes[groupe] = pg.sprite.Group()  # Je les réinitialise
 
         for i in range(3):  # Je parcours les 3 premières couches de la map
-            for x in range(self.x):  # Parcours les colonnes
-                for y in range(self.y):  # Je parcours les lignes
+            for y in range(self.y):  # Parcours les colonnes
+                for x in range(self.x):  # Je parcours les lignes
                     if self.matrices[i][y][x] in ct.tuiles:  # Si la tuile existe
                         if self.matrices[i][y][x] in ct.collisions:  # Si on lui a assigné des collisions
                             x_tuile = self.x_camera + x*32  # Position de la tuile (abscisses)
@@ -158,8 +158,8 @@ class Map:
         """
 
         for i in range(4):  # Je parcours les couches
-            for x in range(self.x):  # Parcours les colonnes
-                for y in range(self.y):  # Je parcours les lignes
+            for y in range(self.y):  # Parcours les colonnes
+                for x in range(self.x):  # Je parcours les lignes
                     if self.matrices[i][y][x] in ct.tuiles:  # Si elle existe
                         tuile = ct.tuiles[self.matrices[i][y][x]]  # On extrait
                         if i < 3:  # Si on parcours les couches 2, 1 et 0

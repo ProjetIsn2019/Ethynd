@@ -45,7 +45,7 @@ def charger_sprite():
 
 
 def charger_monstre(id_niveau = "niveau_1"):
-    """ Céer des monstres d'une liste 
+    """ Créer des monstres d'une liste
     """
     liste_monstre = []
     masqueMonstre = []
@@ -55,7 +55,7 @@ def charger_monstre(id_niveau = "niveau_1"):
 
     for type_monstre in liste_monstre:
         for liste_parametre in cp.niveau[id_niveau][type_monstre]:
-            
+
             monstre = Monstre(type_monstre, liste_parametre)
             cp.entites_liste.append(monstre)
 
@@ -64,7 +64,7 @@ def charger_monstre(id_niveau = "niveau_1"):
         entite.afficher()
         masqueMonstre.append(entite.masque)
     masqueMonstre = masqueMonstre
-    
+
 def gerer_monstres():
     """
     * Gere les montres:
@@ -84,4 +84,3 @@ def gerer_monstres():
             entite.afficher()
             masqueMonstre.append(entite.masque)
     cc.groupes["Monstre"] = masqueMonstre
-
