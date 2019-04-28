@@ -149,10 +149,10 @@ animation = {
 son = {
     "monstre" : {
         "chauve_souris" : {
-            "hit" : "son/monstre/chauve_souris.ogg"
+            "coup" : "son/monstre/chauve_souris.ogg"
         },
         "dragon_rouge" : {
-            "hit" : "son/monstre/dragon_rouge.ogg"
+            "coup" : "son/monstre/dragon_rouge.ogg"
         }
     }
 }

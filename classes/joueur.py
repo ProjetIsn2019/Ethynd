@@ -123,7 +123,6 @@ class Joueur():  # L'objet joueur
             # Créer et assigner le masque
             self.masque_objet.mask = pg.Mask((longueur, hauteur))
             self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
-
             cc.groupes["objet"] = [self.masque_objet]
         else:
             cc.groupes["objet"] = []

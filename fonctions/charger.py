@@ -63,23 +63,3 @@ def charger_monstre(id_niveau = "niveau_1"):
         entite.afficher()
         masqueMonstre.append(entite.masque)
     masqueMonstre = masqueMonstre
-
-def gerer_monstres():
-    """
-    * Gere les montres:
-    *  - ajoute leurs masques
-    *  - les deplaces
-    *  - les affiches
-    *
-    """
-    masqueMonstre = []
-
-    for entite in cp.entites_liste:
-        if entite.vie > 0:
-            if entite.masque.collision("objet"):
-                entite.vie -= 1
-                entite.jouer_son("hit")
-            entite.deplacement()
-            entite.afficher()
-            masqueMonstre.append(entite.masque)
-    cc.groupes["Monstre"] = masqueMonstre

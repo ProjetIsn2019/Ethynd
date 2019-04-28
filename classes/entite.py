@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Les maps
-Objet "Tuile" qui correspond a une tuile.
-Objet "Map" qui correspond a une carte de tuiles.
+Objet "Entité" qui correspond a un "être vivant" à l'échelle du jeu
 Auteur: Dorian Voland
 """
 import pygame as pg

@@ -28,7 +28,7 @@ def initialiser_jeu():
     son.play()  # Le jouer
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprites()  # Charger les images de sprites
-    cp.map = mapping.Map("aventure", (0, 0), "aventure.ogg")  # Chargement de la map
+    cp.map = mapping.Map("aventure", (-200, -600), "aventure.ogg")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
     charger.charger_monstre()
     #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
@@ -112,10 +112,24 @@ def ecran_fin():
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
 
+def gerer_monstres():
+    """  DORIAN
+    * Gere les montres:
+    *  - les deplaces
+    *  - les affiches
+    *  - enlève de la vie
+    """
+    for entite in cp.entites_liste:
+        if entite.vie > 0:
+            if entite.masque.collision("objet"):
+                entite.vie -= 1
+                entite.jouer_son("coup")
+            entite.deplacement()
+            entite.afficher()
 
 def boucle_de_jeu():
     while True:  # Tant que le joueur joue
-        """ Boucle de jeu
+        """ SOFIANE Boucle de jeu
         Boucle de jeu: Gestion events, executée en boucle.
         1 éxécution = 1 tick.
         """
@@ -126,7 +140,7 @@ def boucle_de_jeu():
         cp.map.afficher_arriere_plan()  # Afficher l'arrière plan de la map
         cp.perso.actualiser()  # Actualiser la position du personnage
         #cp.monstre.afficher()  # Afficher les monstres
-        charger.gerer_monstres()
+        gerer_monstres()
         cp.map.afficher_premier_plan()  # Afficher le premier plan de la map
         cp.perso.interface()
 #  ################## EVENEMENTS

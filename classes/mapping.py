@@ -77,12 +77,9 @@ class Map:
         Permets de déplacer les masques de collisions, utilisé lors du
         Déplacement du personnage ou de la camera
         """
-        nouvelle_liste = []  # Variable liste contenant les masques actualisés
         # nouvelle_liste va écraser la liste des constantes de collision pour les tuiles
         for masque in cc.groupes["tuile"]:  # Je parcours le contenu du groupe
             masque.rect.move_ip(x, y)  # Déplacer le rect.
-            nouvelle_liste.append(masque)  # L'ajouter à la nouvelle liste
-        cc.groupes["tuile"] = nouvelle_liste  # Ecraser l'ancienne liste
 
     def bouger(self, x, y):
         """Déplacer la map
