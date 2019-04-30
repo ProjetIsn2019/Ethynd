@@ -5,6 +5,7 @@ Tuiles avec collision
 Tuiles d'eau
 Etc.
 (A IMPORTER)
+Auteur : Le Groupe (Principalement Sofiane)
 """
 tuiles = {}  # Dictionnaire des tuiles. "numero: image", sera défini plus tard dans une fonction de chargement (charger.py)
 animations = {  # Sert a mettre en place les animations de tuiles. Défini par "numéro_tuile" : "numéro_tuile_suivante"

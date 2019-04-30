@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""Les listes de constantes concernant les entités
+Variables etc.
+(A IMPORTER)
+Auteur : Le Groupe
+"""
+
 vitesse = 3
 
 entites_liste = [

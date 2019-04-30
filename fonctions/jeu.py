@@ -28,7 +28,7 @@ def initialiser_jeu():
     son.play()  # Le jouer
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprites()  # Charger les images de sprites
-    cp.map = mapping.Map("aventure", (-200, -600), "aventure.ogg")  # Chargement de la map
+    cp.map = mapping.Map("aventure", (500, 300), "aventure.ogg")  # Chargement de la map
     cp.perso = joueur.Joueur()  # Chargement du joueur
     charger.charger_monstre()
     #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
@@ -90,7 +90,7 @@ def chargement():
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     pg.display.update()
 
-def ecran_fin():
+def fin():
     cp.musique.stop()
 
     if cp.perso.vie < 1:

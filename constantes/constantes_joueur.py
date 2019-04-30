@@ -3,6 +3,7 @@
 Sprites, animations
 Etc.
 (A IMPORTER)
+Auteur : Le Groupe
 """
 import pygame as pg
 

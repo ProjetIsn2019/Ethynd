@@ -2,7 +2,7 @@
 """Les maps
 Objet "Tuile" qui correspond a une tuile.
 Objet "Map" qui correspond a une carte de tuiles.
-Auteur: Sofiane Djerbi
+Auteur: Sofiane Djerbi pour correspondre au modèle de carte imaginé par Anthony
 """
 from constantes import constantes_tuiles as ct
 from constantes import constantes_partie as cp
@@ -28,12 +28,16 @@ class Map:
         1 map est composée de 4 couches, nommées respectivement 0, 1, 2, 3
         Seul la couche "3" (la 4 ème) passe DEVANT le personnage.
         Les couches 0 1 et 2 sont pour les collisions et les graphismes
+        Système de musique créé par Anthony.
         """
         self.compteur = 0  # Variable du compteur d'animation initialisé à 0
         x, y = camera      # On extrait les coordonnées de la tuple
         self.nom = nom     # Définition du nom de la map
-        self.x_camera = x  # Camera X (position de la camera en fonction de l'axe des abcysses)
-        self.y_camera = y  # Camera Y (position de la camera en fonction de l'ordonnée)
+        # On met -x et -y afin d'utiliser des coordonnées positives.
+        # En effet la map utilise un repère orthonormé standard partageant son 0 avec le repère pygame.
+        # Elle est donc très souvent négative.
+        self.x_camera = -x  # Camera X (position de la camera en fonction de l'axe des abcysses)
+        self.y_camera = -y  # Camera Y (position de la camera en fonction de l'ordonnée)
         self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu

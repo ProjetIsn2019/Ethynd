@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Les constantes de collision
-Contient les groupes de collisions ainsi que les listes de collision
+"""Les listes de constantes concernant les collisions.
+Groupes de collision etc.
+(A IMPORTER)
+Auteur : Le Groupe (Principalement Sofiane)
 """
 import pygame as pg
 
