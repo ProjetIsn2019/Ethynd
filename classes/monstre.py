@@ -38,4 +38,4 @@ class Monstre(ent.Entite):
         self.attaque = parametre[4]
         ################
         self.son = None  # Le son du monstre
-        self.masque = col.Masque("Monstre")  # Les collisions du monstre
+        self.hitbox = col.Hitbox("Monstre")  # Les collisions du monstre

@@ -31,12 +31,9 @@ class Entite():
         self.direction = "bas"   # Direction du personnage (bas par défaut)
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
-        self.masque = col.Masque("entite")  # Masque de l'entite
         self.type_deplacement = "base"
 
         self.channel_entite = pg.mixer.Channel(3)
-
-        print("Chargement d'une entité")
         self.charger_sprite()
 
     def jouer_son(self, le_son):
@@ -64,19 +61,19 @@ class Entite():
                         animation[direction][mouvement][numero] = img  # Var
                     numero += 1  # Numéro du sprite actuel + 1
 
-    def bouger_masque(self, coord):
-        """ Gere le mouvement du masque
+    def bouger_hitbox(self, coord):
+        """ Gere le mouvement de la hitbox
         """
-        self.masque.rect = self.sprite.get_rect(center=(self.position[0] + coord[0] + self.taille[0]/2,
+        self.hitbox.rect = self.sprite.get_rect(center=(self.position[0] + coord[0] + self.taille[0]/2,
                                                         self.position[1] + coord[1] + self.taille[1]/2))
-        self.masque.mask = pg.mask.from_surface(self.sprite)
+        self.hitbox.mask = pg.mask.from_surface(self.sprite)
 
-        # pg.draw.rect(cp.ecran, (255,0,0), self.masque.rect)
+        # pg.draw.rect(cp.ecran, (255,0,0), self.hitbox.rect)
     def deplacement(self):
         """ Défini le mouvement de base
         pour une entitée la fait tourner sur elle meme
         """
-        if self.masque.mask is None:  # Si le masque est pas défini
+        if self.hitbox.mask is None:  # Si le hitbox est pas défini
             return  # Quitter la fonction pour éviter un déplacement précoce
 
         if self.compteur_action >= len(ce.deplacement[self.type_deplacement]): # On reinitialise le compteur d'action
@@ -99,16 +96,16 @@ class Entite():
         x = self.position[0] + delta_x + deplacement_x
         y = self.position[1] + delta_y + deplacement_y
 
-        # On bouge le masque a cette emplacement
-        self.bouger_masque((deplacement_x, deplacement_y))
-        if not self.masque.collision("tuile"):  # S'il n'y a pas:
+        # On bouge le hitbox a cette emplacement
+        self.bouger_hitbox((deplacement_x, deplacement_y))
+        if not self.hitbox.collision("tuile"):  # S'il n'y a pas:
             # On actualise les positon
             self.position[0] = x   #en x
             self.position[1] = y  #en y
         else:
             self.position[0] = x - deplacement_x   #en x
             self.position[1] = y - deplacement_y #en y
-        self.bouger_masque((-deplacement_x, -deplacement_y))
+        self.bouger_hitbox((-deplacement_x, -deplacement_y))
 
         # On actualise la camera
         self.pos_ancienne_cam = [cp.map.x_camera, cp.map.y_camera]
@@ -150,8 +147,8 @@ class Entite():
         animation = ce.animation[self.type][self.id][self.direction][self.mouvement]
         # On prend le bon sprite
         self.sprite = animation[self.frame]
-        # On actualise le masque
-        self.bouger_masque((0, 0))
+        # On actualise le hitbox
+        self.bouger_hitbox((0, 0))
 
 
     def afficher(self):
@@ -165,6 +162,3 @@ class Entite():
 
         # Affiche le sprite
         cp.ecran.blit(self.sprite, (x, y))
-
-    def info(self):
-        pass

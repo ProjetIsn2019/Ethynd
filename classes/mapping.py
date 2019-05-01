@@ -7,6 +7,7 @@ Auteur: Sofiane Djerbi pour correspondre au modèle de carte imaginé par Anthon
 from constantes import constantes_tuiles as ct
 from constantes import constantes_partie as cp
 from constantes import constantes_collisions as cc
+from classes import monstre as mstr
 from classes import collision as col
 import pygame as pg
 
@@ -36,8 +37,8 @@ class Map:
         # On met -x et -y afin d'utiliser des coordonnées positives.
         # En effet la map utilise un repère orthonormé standard partageant son 0 avec le repère pygame.
         # Elle est donc très souvent négative.
-        self.x_camera = -x  # Camera X (position de la camera en fonction de l'axe des abcysses)
-        self.y_camera = -y  # Camera Y (position de la camera en fonction de l'ordonnée)
+        self.x_camera = x  # Camera X (position de la camera en fonction de l'axe des abcysses)
+        self.y_camera = y  # Camera Y (position de la camera en fonction de l'ordonnée)
         self.matrices = {  # Dictionnaire des matrices
             0: [],  # Matrice qui stockera le fond
             1: [],  # Matrice qui stockera le milieu
@@ -52,14 +53,14 @@ class Map:
         self.arriere_plan = pg.Surface((self.x*32, self.y*32), pg.SRCALPHA)  # On crée une surface de la taille de la map
         # Variable contenant le premier plan de la map
         self.premier_plan = pg.Surface((self.x*32, self.y*32), pg.SRCALPHA)  # On crée une surface de la taille de la map
-        self.charger_masques()  # Charger les collisions de la map (Masques)
+        self.charger_hitboxs()  # Charger les collisions de la map (Hitboxs)
         self.charger_images()  # Charger l'arrière plan et le premier plan
+        self.vider_monstres()  # Supprimer les monstres de l'ancienne map (si il y en a)
 
         if musique is not None:  # Si une musique est donnée dans les paramètres
             if cp.musique is not None:  # Si une musique est jouée
                 cp.musique.stop()   # Alors arrêter cette musique
-            pg.mixer.Channel(1)
-            cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme de variable
+            cp.musique = pg.mixer.Sound("son/" + musique)  # Récuperer la musique sous forme d'objet
             cp.musique.play(loops=-1)   # Jouer la musique (loops=-1 permet de la jouer en boucle indéfiniment)
 
     def afficher_arriere_plan(self):
@@ -76,14 +77,14 @@ class Map:
         cp.ecran.blit(self.premier_plan, (self.x_camera,
                                           self.y_camera))  # Affiche le premier plan
 
-    def bouger_masque(self, x, y):
-        """Déplace les masques de collision
-        Permets de déplacer les masques de collisions, utilisé lors du
+    def bouger_hitbox(self, x, y):
+        """Déplace les hitboxs de collision
+        Permets de déplacer les hitboxs de collisions, utilisé lors du
         Déplacement du personnage ou de la camera
         """
         # nouvelle_liste va écraser la liste des constantes de collision pour les tuiles
-        for masque in cc.groupes["tuile"]:  # Je parcours le contenu du groupe
-            masque.rect.move_ip(x, y)  # Déplacer le rect.
+        for hitbox in cc.groupes["tuile"]:  # Je parcours le contenu du groupe
+            hitbox.rect.move_ip(x, y)  # Déplacer le rect.
 
     def bouger(self, x, y):
         """Déplacer la map
@@ -123,7 +124,6 @@ class Map:
         for i in range(4):  # On a 4 calques, ici on parcours les calques
             nom_fichier = "maps/" + self.nom + "_" + str(i) + ".csv"  # Nom du fichier
             #                                          # Ex: nom_0.csv
-            print("Chargement de", nom_fichier + "...")  # Les logs
             f = open(nom_fichier, "r")    # Ouvrir le fichier
             for ligne in f.readlines():   # Je regarde chaque lignes
                 ligne = ligne.replace("\n", "")  # Je supprime les \n
@@ -132,7 +132,7 @@ class Map:
                     self.matrices[i].append(ligne)  # On ajoute la liste
             f.close()  # Fermer fichier
 
-    def charger_masques(self):
+    def charger_hitboxs(self):
         """ Crée les rectangles de collisions de la map
         Permets de charger les rectangles de collision de la map
         (Peut génèrer des latences !)
@@ -150,7 +150,32 @@ class Map:
                             tuile = ct.tuiles[self.matrices[i][y][x]]  # On extrait l'image
                             mask = pg.mask.from_surface(tuile)  # On fait le mask a partir de cette image
                             rect = pg.Rect(x_tuile, y_tuile, 32, 32)  # On créé le rectangle associé a l'image
-                            col.Masque("tuile", rect, mask)  # Sauvegarder la liste (rect + mask)
+                            col.Hitbox("tuile", rect, mask)  # Sauvegarder la liste (rect + mask)
+
+    def vider_monstres(self):
+        """ Supprime tout les monstres
+        Utilisé lors d'un changement de map
+        """
+        cp.entites_liste = []
+
+    def charger_monstres(self):
+        """ Crée les monstres associés a une map
+        Créer des monstres d'une liste
+        """
+        liste_monstre = []
+
+        for type_monstre in cp.niveau[self.nom]:
+            liste_monstre.append(type_monstre)
+
+        for type_monstre in liste_monstre:
+            for liste_parametre in cp.niveau[self.nom][type_monstre]:
+                monstre = mstr.Monstre(type_monstre, liste_parametre)
+                cp.entites_liste.append(monstre)
+
+        for entite in cp.entites_liste:
+            entite.deplacement()
+            entite.afficher()
+
 
     def charger_images(self):
         """ Charge dans la variable self.arriere_plan l'image superposée des 3 premieres couches (0, 1, 2)

@@ -9,7 +9,6 @@ from constantes import constantes_joueur as cj
 from constantes import constantes_tuiles as ct
 from constantes import constantes_partie as cp
 from constantes import constantes_collisions as cc
-from classes.monstre import Monstre
 
 def charger_tileset():
     """Charger un tileset
@@ -43,17 +42,17 @@ def charger_sprites():
                 numero += 1  # Numéro du sprite actuel + 1 (Le compteur)
 
 
-def charger_monstre(id_niveau = "niveau_1"):
-    """ Créer des monstres d'une liste
+def charger_monstres(self):
+    """ Crée les monstres associés a une map
+    Créer des monstres d'une liste
     """
     liste_monstre = []
-    masqueMonstre = []
 
-    for type_monstre in cp.niveau[id_niveau]:
+    for type_monstre in cp.niveau[self.nom]:
         liste_monstre.append(type_monstre)
 
     for type_monstre in liste_monstre:
-        for liste_parametre in cp.niveau[id_niveau][type_monstre]:
+        for liste_parametre in cp.niveau[self.nom][type_monstre]:
 
             monstre = Monstre(type_monstre, liste_parametre)
             cp.entites_liste.append(monstre)
@@ -61,5 +60,3 @@ def charger_monstre(id_niveau = "niveau_1"):
     for entite in cp.entites_liste:
         entite.deplacement()
         entite.afficher()
-        masqueMonstre.append(entite.masque)
-    masqueMonstre = masqueMonstre

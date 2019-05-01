@@ -24,14 +24,11 @@ def initialiser_fenetre():
 
 def initialiser_jeu():
     chargement()  # J'affiche l'écran de chargement
-    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
-    son.play()  # Le jouer
     charger.charger_tileset()  # Charger les images de tuiles
     charger.charger_sprites()  # Charger les images de sprites
-    cp.map = mapping.Map("aventure", (500, 300), "aventure.ogg")  # Chargement de la map
+    cp.map = mapping.Map("maison", (14, 93), "maison.ogg")  # Chargement de la map
+    cp.map.charger_monstres()
     cp.perso = joueur.Joueur()  # Chargement du joueur
-    charger.charger_monstre()
-    #cp.monstre = entite.Monstre("dragon_rouge", [50, 200], [57, 57], "aleatoire", 10, 1)
     boucle_de_jeu()  # Lancer la partie
 
 def initialiser_musique():
@@ -44,9 +41,8 @@ def initialiser_musique():
 
 
 def menu():
-    musique = pg.mixer.Channel(1)
     son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
-    musique.play(son)  # Le jouer
+    son.play()  # Le jouer
     image = pg.image.load("images/menu/menu.png").convert()  # Charger l'image du menu
     cp.ecran.blit(image, (0, 0))  # Affiher l'image du menu
     while True:  # Boucle infinie
@@ -69,9 +65,8 @@ def menu():
 
 
 def aide():
-    musique = pg.mixer.Channel(1)
     son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
-    musique.play(son)  # Le jouer
+    son.play()
     image = pg.image.load("images/menu/aide.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     while True:  # Boucle infinie
@@ -86,6 +81,8 @@ def aide():
         pg.display.update()  # On change de tick. On actualise l'écran.
 
 def chargement():
+    son = pg.mixer.Sound("son/selection_menu.ogg")  # Récuperer l'effet musical de séléction
+    son.play()  # Le jouer
     image = pg.image.load("images/menu/chargement.png").convert()  # Charger l'image de l'aide
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     pg.display.update()
@@ -121,7 +118,7 @@ def gerer_monstres():
     """
     for entite in cp.entites_liste:
         if entite.vie > 0:
-            if entite.masque.collision("objet"):
+            if entite.hitbox.collision("objet"):
                 entite.vie -= 1
                 entite.jouer_son("coup")
             entite.deplacement()
@@ -134,13 +131,13 @@ def boucle_de_jeu():
         1 éxécution = 1 tick.
         """
 
-        cp.map.actualiser()
+        cp.ecran.fill((32, 23, 41))  # On met une couleur de fond noir
+        teleportation()  # Faire les téléportations
         cp.perso.lire_touches()  # Faire les déplacements/Animations du personnage
-        #cp.monstre.deplacement()  # Effectuer le déplacement de tout les monstres
+        cp.map.actualiser()  # On actualise les tuiles animés de la maps
         cp.map.afficher_arriere_plan()  # Afficher l'arrière plan de la map
+        gerer_monstres()  # Déplacer, afficher les monstres
         cp.perso.actualiser()  # Actualiser la position du personnage
-        #cp.monstre.afficher()  # Afficher les monstres
-        gerer_monstres()
         cp.map.afficher_premier_plan()  # Afficher le premier plan de la map
         cp.perso.interface()
 #  ################## EVENEMENTS
@@ -153,3 +150,37 @@ def boucle_de_jeu():
 #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
+
+def teleportation():
+    """ ANTHONY / SOFIANE
+    Téléporte le joueur et éxecute des choses a certain endroit de la map
+    """
+    if cp.map.nom is "maison":  # Si le joueur est dans la maison
+        if 110 <= cp.map.x_camera <= 146 and -249 <= cp.map.y_camera <= -235:
+            chargement()
+            cp.map = mapping.Map("aventure", (-464, -261), "aventure.ogg")  # Chargement de la map aventure
+            cp.map.charger_monstres()
+        if -19 <= cp.map.x_camera <= 26 and -180 <= cp.map.y_camera <= -168:
+            chargement()
+            cp.map = mapping.Map("grotte", (-416, -180), "grotte.ogg")  # Chargement de la map grotte
+            cp.map.charger_monstres()
+
+    if cp.map.nom is "grotte":  # Si le joueur est dans la grotte
+        if 133 <= cp.map.x_camera <= 220 and -610 <= cp.map.y_camera <= -600:  # SI LE JOUEUR SORS DE LA GROTTE
+            chargement()
+            cp.map = mapping.Map("aventure", (-1103, -460), "aventure.ogg")  # Chargement de la map aventure
+            cp.map.charger_monstres()
+        if -434 <= cp.map.x_camera <= -398 and -138 <= cp.map.y_camera <= -111:  # Si le joueur rentre dans la maison
+            chargement()
+            cp.map = mapping.Map("maison", (0, -125), "maison.ogg")  # Chargement de la map maison
+            cp.map.charger_monstres()
+
+    if cp.map.nom is "aventure":  # Si le nom de la map est "aventure"
+        if -467 <= cp.map.x_camera <= -461 and -255 <= cp.map.y_camera <= -237:  # SI LE JOUEUR RENTRE DANS LA MAISON
+            chargement()
+            cp.map = mapping.Map("maison", (128, -234), "maison.ogg")  # Chargement de la map maison
+            cp.map.charger_monstres()
+        if -1106 <= cp.map.x_camera <= -1100 and -451 <= cp.map.y_camera <= -430:  # SI LE JOUEUR RENTRE DANS LA GROTTE
+            chargement()
+            cp.map = mapping.Map("grotte", (175, -591), "grotte.ogg")  # Chargement de la map maison
+            cp.map.charger_monstres()

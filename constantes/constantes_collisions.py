@@ -7,11 +7,11 @@ Auteur : Le Groupe (Principalement Sofiane)
 import pygame as pg
 
 groupes = {
-    "tuile": pg.sprite.Group(),     # Liste des masques pour les tuiles
-    "entite": pg.sprite.Group(),   # Liste des masques pour les entiees
-    "joueur": pg.sprite.Group(),    # Liste des masques pour les joueurs
-    "Monstre": pg.sprite.Group(),   # Liste des masques pour les ennemis
-    "objet": pg.sprite.Group(),     # Liste des masques pour les objets
-    "pnj": pg.sprite.Group(),       # Liste des masques pour les personnages non joueurs
-    "tout": pg.sprite.Group()       # Liste des masques pour tout
+    "tuile": pg.sprite.Group(),     # Liste des hitboxs pour les tuiles
+    "entite": pg.sprite.Group(),   # Liste des hitboxs pour les entiees
+    "joueur": pg.sprite.Group(),    # Liste des hitboxs pour les joueurs
+    "Monstre": pg.sprite.Group(),   # Liste des hitboxs pour les ennemis
+    "objet": pg.sprite.Group(),     # Liste des hitboxs pour les objets
+    "pnj": pg.sprite.Group(),       # Liste des hitboxs pour les personnages non joueurs
+    "tout": pg.sprite.Group()       # Liste des hitboxs pour tout
 }

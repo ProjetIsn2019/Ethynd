@@ -21,25 +21,25 @@ class Joueur():  # L'objet joueur
         self.direction = "bas"   # Direction du personnage (bas par défaut)
         self.mouvement = "base"  # Mouvement actuel du joueur (base = debout)
         self.libre = True        # Si le personnage est pas occupé à faire qqch
-        self.masque = col.Masque("joueur")  # Masque du joueur
-        self.masque_objet = col.Masque("objet")  # Masque du joueur
+        self.hitbox = col.Hitbox("joueur")  # Hitbox du joueur
+        self.hitbox_objet = col.Hitbox("objet")  # Hitbox du joueur
         self.vie = 10  # Points de vie du personnage
         self.blesser = False  # Si le personnage est blessé ou non
         # Créer un rectangle centré sur les jambes du personnage pour les collisions
-        self.masque.rect = pg.Rect((0, 0), (25, 20))
-        self.masque.rect.center = (cp.centre_x, cp.centre_y+13)
-        # Créer et assigner le masque
-        self.masque.mask = pg.Mask((25, 20))
-        self.masque.mask.fill()  # Remplir le masque pour créer un bloc
+        self.hitbox.rect = pg.Rect((0, 0), (25, 20))
+        self.hitbox.rect.center = (cp.centre_x, cp.centre_y+13)
+        # Créer et assigner le hitbox
+        self.hitbox.mask = pg.Mask((25, 20))
+        self.hitbox.mask.fill()  # Remplir le hitbox pour créer un bloc
 
         self.channel_joueur = pg.mixer.Channel(2)
 
         # Créer un rectangle centré sur les jambes du personnage pour les collisions
-        self.masque_objet.rect = pg.Rect((cp.centre_x-20, cp.centre_y+10), (32, 22))
-        self.masque_objet.rect.center = (cp.centre_x-4, cp.centre_y-11)
-        # Créer et assigner le masque
-        self.masque_objet.mask = pg.Mask((32, 22))
-        self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
+        self.hitbox_objet.rect = pg.Rect((cp.centre_x-20, cp.centre_y+10), (32, 22))
+        self.hitbox_objet.rect.center = (cp.centre_x-4, cp.centre_y-11)
+        # Créer et assigner le hitbox
+        self.hitbox_objet.mask = pg.Mask((32, 22))
+        self.hitbox_objet.mask.fill()  # Remplir le hitbox pour créer un bloc
 
 
 
@@ -51,7 +51,7 @@ class Joueur():  # L'objet joueur
         touches = pg.key.get_pressed()  # Touches enfoncées
         if not self.libre:  # Si le personnage est occupé
             return          # Quitter la fonction
-        if self.masque.mask is None:  # Si le masque est pas défini
+        if self.hitbox.mask is None:  # Si le hitbox est pas défini
             return  # Quitter la fonction pour éviter un déplacement précoce
         for touche in cj.touches:  # Je parcours les touches enfoncées
             if touches[touche]:  # Si la touche est définie dans constantes
@@ -68,11 +68,11 @@ class Joueur():  # L'objet joueur
                 # Capturer les déplacements
                 x = touche[0]  # Nombre de pixels en x
                 y = touche[1]  # Nombre de pixels en x
-                # Déplacer le masque pour tester la position
-                cp.map.bouger_masque(x, y)
-                if self.masque.collision("tuile"):  # Si il y a collision:
+                # Déplacer le hitbox pour tester la position
+                cp.map.bouger_hitbox(x, y)
+                if self.hitbox.collision("tuile"):  # Si il y a collision:
                     # Annuler le déplacement de la hitbox de la map
-                    cp.map.bouger_masque(-x, -y)
+                    cp.map.bouger_hitbox(-x, -y)
                 else:  # Sinon, si il y a pas collision
                     cp.map.bouger(x, y)
 
@@ -85,12 +85,12 @@ class Joueur():  # L'objet joueur
     def enlever_vie(self):
         """ Enleve de la vie au joueur si il prend des dégats
         """
-        if self.masque.collision("Monstre") and not self.blesser:
-            if not self.masque_objet.collision("Monstre"):
+        if self.hitbox.collision("Monstre") and not self.blesser:
+            if not self.hitbox_objet.collision("Monstre"):
                 self.blesser = True
                 self.vie -= 1
 
-        elif not self.masque.collision("Monstre") and self.blesser:
+        elif not self.hitbox.collision("Monstre") and self.blesser:
             self.blesser = False
 
     def attaquer(self):
@@ -118,12 +118,12 @@ class Joueur():  # L'objet joueur
 
             hitbox = pg.Rect((x, y), (longueur, hauteur))
 
-            self.masque_objet.rect = hitbox
-            self.masque_objet.rect.center = (x- longueur/2, y - hauteur/2)
-            # Créer et assigner le masque
-            self.masque_objet.mask = pg.Mask((longueur, hauteur))
-            self.masque_objet.mask.fill()  # Remplir le masque pour créer un bloc
-            cc.groupes["objet"] = [self.masque_objet]
+            self.hitbox_objet.rect = hitbox
+            self.hitbox_objet.rect.center = (x- longueur/2, y - hauteur/2)
+            # Créer et assigner le hitbox
+            self.hitbox_objet.mask = pg.Mask((longueur, hauteur))
+            self.hitbox_objet.mask.fill()  # Remplir le hitbox pour créer un bloc
+            cc.groupes["objet"] = [self.hitbox_objet]
         else:
             cc.groupes["objet"] = []
 
@@ -138,10 +138,6 @@ class Joueur():  # L'objet joueur
             if self.mouvement == "marche":
                 self.son = pg.mixer.Sound(cj.son["marche"])
                 self.channel_joueur.play(self.son)
-
-        if self.mouvement == "base":
-                self.channel_joueur.stop()
-
 
 
     def actualiser_frame(self):
@@ -178,17 +174,18 @@ class Joueur():  # L'objet joueur
         # Charger la liste de sprites relative a la direction et le mouvement
         sprite = cj.animation[self.direction][self.mouvement]
         self.sprite = sprite[self.frame]  # Prendre le sprite correspondant
-        cc.groupes["joueur"] = [self.masque]
+        cc.groupes["joueur"] = [self.hitbox]
 
     def interface(self):
-        """ Affiche les information comme la vie
+        """ Affiche les information (uniquement vie pour l'instant)
         """
-        coeur = pg.image.load("images/objets/coeur.png").convert_alpha()
-        for i in range(self.vie):
-            cp.ecran.blit(coeur, (35*i, 30))
+        pg.draw.rect(cp.ecran, (105, 0, 0), pg.Rect(0, 0, self.vie*20, 10))
+        police = pg.font.SysFont("arial", 10)
+        texte = police.render("Vie", True, (255, 255, 255))
+        cp.ecran.blit(texte, (0,-2))
 
     def actualiser(self):
-        """Affiche le personnage"""
+        """Actualise les stats du personnage"""
         self.enlever_vie()
         self.actualiser_frame()  # Actualiser les frames
         self.actualiser_sprite()  # Actualiser le sprite

@@ -19,14 +19,28 @@ entites_liste = []      # Liste des entités chargé dans un niveau
 
 # Syntaxe : [coordonnées], [taille_sprite], "type mouvement", vie, attaque
 niveau = {
-	"niveau_1" : {
-		"dragon_rouge" : [
-				[[0, 0], [57, 57],"aleatoire", 10, 1],
-
-			],
-		"chauve_souris" :[
-				[[0, 0], [32, 32],"aleatoire", 10, 1],
-			]
-
-		}
+	"grotte": {
+		"chauve_souris": [
+				[[269, 315], [32, 32], "aleatoire", 10, 2],
+				[[500, 400], [32, 32], "aleatoire", 10, 2],
+				[[770, 450], [32, 32], "aleatoire", 10, 2],
+				[[700, 600], [32, 32], "aleatoire", 10, 2],
+		]
+	},
+	"maison": {
+		"chat": [
+				[[100, 300], [32, 32], "aleatoire", 10000, 0],  # Invincible
+		]
+	},
+	"aventure": {
+		"oiseau": [
+				[[1000, 806], [32, 32], "aleatoire", 10000, 0],
+				[[2189, 1753], [32, 32], "aleatoire", 10000, 0],
+		],
+		"poussin": [
+				[[550, 696], [32, 32], "aleatoire", 10000, 0],
+				[[326, 1618], [32, 32], "aleatoire", 10000, 0],
+				[[1967, 2137], [32, 32], "aleatoire", 10000, 0],
+		]
+	}
 }
