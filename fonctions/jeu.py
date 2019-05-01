@@ -141,7 +141,7 @@ def boucle_de_jeu():
         # EVENEMENT NON PYGAME (SI LE PERSONNAGE MEURT ETC):
         teleportation()  # Faire les téléportations
         if cp.perso.vie < 1:  # Si le personnage n'as plus de vie
-            mort()
+            return mort()
 #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
