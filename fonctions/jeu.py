@@ -87,25 +87,17 @@ def chargement():
     cp.ecran.blit(image, (0, 0))  # Affiher l'image de l'aide
     pg.display.update()
 
-def fin():
+def mort():
     cp.musique.stop()
-
-    if cp.perso.vie < 1:
-        image = pg.image.load("images/menu/mort.png").convert()  # Charger l'image du menu
-    else:
-        image = pg.image.load("images/menu/fin.png").convert()  # Charger l'image du menu de fin
-
+    image = pg.image.load("images/menu/mort.png").convert()  # Charger l'image de mort
     cp.ecran.blit(image, (0, 0))  # Affiher l'image en question
-
-    while True or i < 180:  # Boucle infinie
-        i += 1
-        #  ################### EVENEMENTS
+    while True:  # Boucle infinie
         for evenement in pg.event.get():  # Je parcours les evenements
             if evenement.type == pg.KEYDOWN:  # Event : Touche enclenchée
-                return menu()
+                if evenement.key == pg.K_ESCAPE:  # Si touche = Echappe
+                    return  # Quitter la fonction
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
-                return  # On quitte
-        #  ################### EVENEMENTS
+                return  # Quitter
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
 
@@ -132,7 +124,6 @@ def boucle_de_jeu():
         """
 
         cp.ecran.fill((32, 23, 41))  # On met une couleur de fond noir
-        teleportation()  # Faire les téléportations
         cp.perso.lire_touches()  # Faire les déplacements/Animations du personnage
         cp.map.actualiser()  # On actualise les tuiles animés de la maps
         cp.map.afficher_arriere_plan()  # Afficher l'arrière plan de la map
@@ -147,6 +138,10 @@ def boucle_de_jeu():
                     return  # On quitte
             elif evenement.type == pg.QUIT:  # Event : Quitter la fenetre
                     return  # On quitte
+        # EVENEMENT NON PYGAME (SI LE PERSONNAGE MEURT ETC):
+        teleportation()  # Faire les téléportations
+        if cp.perso.vie < 1:  # Si le personnage n'as plus de vie
+            mort()
 #  ################### EVENEMENTS
         cp.horloge.tick(cp.tps)  # 30 tick par seconde seront executés
         pg.display.update()  # On change de tick. On actualise l'écran.
@@ -160,27 +155,27 @@ def teleportation():
             chargement()
             cp.map = mapping.Map("aventure", (-464, -261), "aventure.ogg")  # Chargement de la map aventure
             cp.map.charger_monstres()
-        if -19 <= cp.map.x_camera <= 26 and -180 <= cp.map.y_camera <= -168:
+        elif -19 <= cp.map.x_camera <= 26 and -180 <= cp.map.y_camera <= -168:
             chargement()
             cp.map = mapping.Map("grotte", (-416, -180), "grotte.ogg")  # Chargement de la map grotte
             cp.map.charger_monstres()
 
-    if cp.map.nom is "grotte":  # Si le joueur est dans la grotte
+    elif cp.map.nom is "grotte":  # Si le joueur est dans la grotte
         if 133 <= cp.map.x_camera <= 220 and -610 <= cp.map.y_camera <= -600:  # SI LE JOUEUR SORS DE LA GROTTE
             chargement()
             cp.map = mapping.Map("aventure", (-1103, -460), "aventure.ogg")  # Chargement de la map aventure
             cp.map.charger_monstres()
-        if -434 <= cp.map.x_camera <= -398 and -138 <= cp.map.y_camera <= -111:  # Si le joueur rentre dans la maison
+        elif -434 <= cp.map.x_camera <= -398 and -138 <= cp.map.y_camera <= -111:  # Si le joueur rentre dans la maison
             chargement()
             cp.map = mapping.Map("maison", (0, -125), "maison.ogg")  # Chargement de la map maison
             cp.map.charger_monstres()
 
-    if cp.map.nom is "aventure":  # Si le nom de la map est "aventure"
+    elif cp.map.nom is "aventure":  # Si le nom de la map est "aventure" (elif au cas ou on veut ajouter encore des maps)
         if -467 <= cp.map.x_camera <= -461 and -255 <= cp.map.y_camera <= -237:  # SI LE JOUEUR RENTRE DANS LA MAISON
             chargement()
             cp.map = mapping.Map("maison", (128, -234), "maison.ogg")  # Chargement de la map maison
             cp.map.charger_monstres()
-        if -1106 <= cp.map.x_camera <= -1100 and -451 <= cp.map.y_camera <= -430:  # SI LE JOUEUR RENTRE DANS LA GROTTE
+        elif -1106 <= cp.map.x_camera <= -1100 and -451 <= cp.map.y_camera <= -430:  # SI LE JOUEUR RENTRE DANS LA GROTTE
             chargement()
             cp.map = mapping.Map("grotte", (175, -591), "grotte.ogg")  # Chargement de la map maison
             cp.map.charger_monstres()
