@@ -66,7 +66,8 @@ class Entite():
         """
         self.hitbox.rect = self.sprite.get_rect(center=(self.position[0] + coord[0] + self.taille[0]/2,
                                                         self.position[1] + coord[1] + self.taille[1]/2))
-        self.hitbox.mask = pg.mask.from_surface(self.sprite)
+        self.hitbox.mask = pg.Mask((self.taille[0], self.taille[1]))
+        self.hitbox.mask.fill()  # Remplir le hitbox pour créer un bloc
 
         # pg.draw.rect(cp.ecran, (255,0,0), self.hitbox.rect)
     def deplacement(self):
