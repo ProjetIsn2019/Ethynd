@@ -29,7 +29,7 @@ niveau = {
 	},
 	"maison": {
 		"chat": [
-				[[100, 300], [32, 32], "aleatoire", 10000, 0],  # Invincible
+				[[100, 320], [32, 32], "aleatoire", 10000, 0],  # Invincible
 		]
 	},
 	"aventure": {
