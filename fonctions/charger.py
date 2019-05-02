@@ -40,23 +40,3 @@ def charger_sprites():
                     img = pg.image.load(sprite).convert_alpha()  # Charger
                     cj.animation[direction][mouvement][numero] = img  # Sauver
                 numero += 1  # Numéro du sprite actuel + 1 (Le compteur)
-
-
-def charger_monstres(self):
-    """ Crée les monstres associés a une map
-    Créer des monstres d'une liste
-    """
-    liste_monstre = []
-
-    for type_monstre in cp.niveau[self.nom]:
-        liste_monstre.append(type_monstre)
-
-    for type_monstre in liste_monstre:
-        for liste_parametre in cp.niveau[self.nom][type_monstre]:
-
-            monstre = Monstre(type_monstre, liste_parametre)
-            cp.entites_liste.append(monstre)
-
-    for entite in cp.entites_liste:
-        entite.deplacement()
-        entite.afficher()

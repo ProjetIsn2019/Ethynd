@@ -88,7 +88,7 @@ class Joueur():  # L'objet joueur
         if self.hitbox.collision("Monstre") and not self.blesser:
             if not self.hitbox_objet.collision("Monstre"):
                 self.son = pg.mixer.Sound(cj.son["blessure"])
-                self.channel_joueur.play(self.son) 
+                self.channel_joueur.play(self.son)
                 self.blesser = True
                 self.vie -= 1
 
@@ -96,6 +96,8 @@ class Joueur():  # L'objet joueur
             self.blesser = False
 
     def attaquer(self):
+        """ Déplace la hitbox de l'épée en fonction de la direction lors d'une attaque
+        """
         if self.mouvement == "attaque":
             if self.direction == "bas":
                 x = cp.centre_x + 10
