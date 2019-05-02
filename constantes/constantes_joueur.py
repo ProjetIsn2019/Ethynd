@@ -111,4 +111,5 @@ animation = {  # Repertorier les sprites
 son = {
     "marche" : "son/joueur/marche.ogg",
     "attaque": "son/joueur/attaque.ogg",
+    "blessure": "son/joueur/blessure.ogg"
 }
