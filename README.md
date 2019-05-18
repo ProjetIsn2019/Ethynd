@@ -1,5 +1,6 @@
 # Ethynd
 Notre projet d'ISN : Un RPG, fait avec Pygame. **PROJET FINI** !  
+Nombre de lignes de codes (Projet complet, site compris) : `4035`  
 Notes obtenues au bac :  
 - Kugge (Sofiane) : **EN ATTENTE**  
 - Anthodd (Anthony) : **EN ATTENTE**  
