@@ -10,8 +10,8 @@ Notes obtenues au bac :
 !(https://projetisn2019.github.io/images/sofiane/collisions.gif)
 
 ## Liens importants
-[Site Web Officiel](https://projetisn2019.github.io/)  
-[Tableau de bord, cahier des charges et sources](https://github.com/ProjetIsn2019/Rapports/blob/master/RECAPITULATIF.md) 
+- [Site Web Officiel](https://projetisn2019.github.io/)  
+- [Tableau de bord, cahier des charges et sources](https://github.com/ProjetIsn2019/Rapports/blob/master/RECAPITULATIF.md) 
 
 ## Télécharger le jeu et y jouer
 Il suffit de cliquer **[ici](https://github.com/ProjetIsn2019/Ethynd/archive/master.zip)**.  
