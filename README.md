@@ -16,7 +16,9 @@ Notes obtenues au bac :
 
 ## Télécharger le jeu et y jouer
 Il suffit de cliquer **[ici](https://github.com/ProjetIsn2019/Ethynd/archive/master.zip)**.  
-Ensuite, vous pouvez executer le fichier `main.py`.
+Ensuite, vous pouvez executer le fichier `main.py`.  
+[Python](https://www.python.org/) est requis. [Pygame](https://www.pygame.org/) également.  
+Installer pygame en ligne de commande : `pip install pygame`
 
 ## Post Scriptum
 Merci à **dcinoot** pour nous avoir autorisé à utiliser ses musiques.  
