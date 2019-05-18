@@ -7,8 +7,8 @@ Notes obtenues au bac :
 - CerfVoland (Dorian) : **EN ATTENTE**
 
 ## Screenshots du projet final
-![https://github.com/ProjetIsn2019/Rapports/blob/master/images/photo_perso.PNG?raw=true]  
-![https://projetisn2019.github.io/images/sofiane/collisions.gif]
+![Screen](https://github.com/ProjetIsn2019/Rapports/blob/master/images/photo_perso.PNG?raw=true)  
+![Screen](https://projetisn2019.github.io/images/sofiane/collisions.gif)
 
 ## Liens importants
 - [Site Web Officiel](https://projetisn2019.github.io/)  
