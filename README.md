@@ -22,7 +22,7 @@ Installer pygame en ligne de commande : `pip install pygame`
 
 ## Post Scriptum
 Merci à **dcinoot** pour nous avoir autorisé à utiliser ses musiques.  
-Projet réalisé au lycée Aristide Bergès.
+Projet réalisé au lycée **Aristide Bergès**.
 ### Mot du chef de projet
 Le projet est libre de droit, je serais ravi de savoir si vous l'utilisez ou bien si vous vous en inspirez !  
 Contact du chef de projet : __sofiane.djerbi38@gmail.com__
