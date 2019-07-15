@@ -2,9 +2,9 @@
 Notre projet d'ISN : Un RPG, fait avec Pygame. **PROJET FINI** !  
 Nombre de lignes de codes (Projet complet, site compris) : `4035`  
 Notes obtenues au bac :  
-- Kugge (Sofiane) : **EN ATTENTE**  
-- Anthodd (Anthony) : **EN ATTENTE**  
-- CerfVoland (Dorian) : **EN ATTENTE**
+- Kugge (Sofiane) : 20/20  
+- Anthodd (Anthony) : 12/20  
+- CerfVoland (Dorian) : 19/20
 
 ## Screenshots du projet final
 ![Screen](https://github.com/ProjetIsn2019/Rapports/blob/master/images/photo_perso.PNG?raw=true)  
